@@ -17,10 +17,5 @@
 *-blx.bib
 *.brf
 *.run.xml
-.cproject
-.dep.inc
-.project
-.settings/
-nbproject/
-test
+quantum_poly_factor.pdf
 
