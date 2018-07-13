@@ -18,4 +18,4 @@
 *.brf
 *.run.xml
 quantum_poly_factor.pdf
-
+*tex.backup

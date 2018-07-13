@@ -1,6 +1,6 @@
-\documentclass[12pt]{article}
+\documentclass{article}
 
-%% \usepackage[margin = 1in]{geometry}
+% usepackage[margin = 1in]{geometry}
 \usepackage{fullpage}              
 \usepackage{graphicx}              
 \usepackage{amsmath}               
@@ -101,8 +101,6 @@
 
 \author[1]{Javad Doliskani}
 \affil[1]{\small Institute for Quantum Computing, University of Waterloo}
-\author[2]{\'Eric Schost}
-\affil[2]{\small Cheriton School of Computer Science, University of Waterloo}
 
 \date{}
 
@@ -129,27 +127,6 @@ o(1)}q)$ bit operations.
 
 %/////////////////////////////////////////////////////
 
-\section{Introduction}
-
-Factoring polynomials over finite fields has been known to be Las
-Vegas polynomial time in Berlekamp's work~\cite{Berlekamp70}. However,
-as of now, there is no known algorithm with quasi-linear runtime, even
-allowing randomization: the best result to date is a modification due
-to Kedlaya and Umans of an algorithm of Kaltofen and
-Shoup's~\cite{KaSh98,kedlaya2011fast}; to factor a degree $n$ polynomial
-over $\F_q$, it uses an expected $n^{3/2+\varepsilon}
-\log(q)^{1+o(1)}$ bit operations on a RAM, for any $\varepsilon > 0$.
-
-Despite much further effort, no improvement on the exponent
-${3/2+\varepsilon}$ has been found; in recent
-work~\cite{guo_et_al:LIPIcs:2016:6460}, Guo {\it et al.} give a list
-of algorithmic problems for which a fast solution would allow one to
-reduce this exponent.
-
-
-
-%/////////////////////////////////////////////////////
-
 
 \section{Estimating the order of an automorphism}
 \label{sec:ord-frob}
@@ -162,12 +139,12 @@ automorphism $\sigma \in \lrang{\pi}$. The quantum algorithm is not new; It is a
 finding algorithm adapted to our situation. 
 
 To find the order of an automorphism $\sigma$ we use the techniques in \cite{kaye2007introduction, 
-nielsen2010quantum}. The group $\lrang{\sigma}$ is isomorphic to the additive group $\Z/d\Z$ for 
-some $d > 0$. Since the action of $\sigma$ on $\K$ is determined by the action of $\sigma$ on $x$, 
-the powers $\sigma^j$ are represented by polynomials $\sigma^j(x) \in \K$ for all $j \ge 0$. A 
-polynomial $h \in \K$ is represented using an array of size $n$ containing the coefficients of $h$. 
-The number qubits for representing the elements of $\K$ is then $n\lceil \log q \rceil$. For an 
-integer $j$ and a polynomial $h \in \K$, define the action of $\sigma$ on the state $\ldbrac{j} 
+nielsen2010quantum}. The group $\lrang{\sigma}$ is isomorphic to the additive group $\Z/r\Z$ for 
+some ineteger $r > 0$. Since the action of $\sigma$ on $\K$ is determined by the action of $\sigma$ 
+on $x$, the powers $\sigma^j$ are represented by polynomials $\sigma^j(x) \in \K$ for all $j \ge 0$. 
+A polynomial $h \in \K$ is represented using an array of size $n$ containing the coefficients of 
+$h$. The number of qubits for representing the elements of $\K$ is then $n\lceil \log q \rceil$. For 
+an integer $j$ and a polynomial $h \in \K$, define the action of $\sigma$ on the state $\ldbrac{j} 
 \ldbrac{h}$ as
 \begin{equation}
 	\label{equ:sig-act}
@@ -179,38 +156,30 @@ The main ingredient of order finding algorithms is the \textit{quantum Fourier t
 For any finite group $G$ and any function $t: G \rightarrow \C$ the QFT over $G$ is a specific 
 unitary operator on the vector space $\C[G]$ that takes the complex numbers $\{ t(g) \}_{g \in 
 G}$ to another set of $\abs{G}$ complex numbers \cite{hallgren2003hidden}. We shall only need QFT 
-over the additiv group $\Z/m\Z$, denoted by $F_m$, for a given integer $m$. In this case, we have 
-\[ F_m: \ldbrac{x} \longmapsto \frac{1}{\sqrt{m}}\sum_{y \in \Z/m\Z}\zeta_m^{xy}\ldbrac{y} \]
-where $x \in \Z/m\Z$ and $\zeta_m = e^{2\pi i / m} \in \C$. 
+over the additive group $\Z/N\Z$, denoted by $F_N$, where $N = 2^m$ for some integer $m$. In this 
+case, we have 
+\[ F_N: \ldbrac{k} \longmapsto \frac{1}{\sqrt{N}}\sum_{j \in \Z/N\Z}\zeta_N^{kj}\ldbrac{j} \]
+where $k \in \Z/N\Z$ and $\zeta_N = e^{2\pi i / N} \in \C$. An $\ell$-bit estimate of the order $r$ 
+of $\sigma$ is obtained as follows. Prepare two registers with intial value $\ldbrac{0}\ldbrac{0}$, 
+the first register of length $m = 2\ell + 1$ qubits and the second of length $n\lceil \log q 
+\rceil$ qubits. Create a superposition in the first register to get the state 
+\[ \ldbrac{\psi} = \frac{1}{\sqrt{N}} \sum_{j \in \Z/N\Z} \ldbrac{j}\ldbrac{0}. \]
+Applying $\sigma$ to $\ldbrac{\psi}$ and rewriting the resulting sum based on the period $r$ give
+\[ \sigma\ldbrac{\psi} = \frac{1}{\sqrt{N}} \sum_{j \in \Z/N\Z} \ldbrac{j}\ldbrac{\sigma^j(x)} = 
+\sum_{b = 0}^{r - 1}\left( \frac{1}{\sqrt{N}}\sum_{z = 0}^{m_b - 1}\ldbrac{zr + b} \right) 
+\ldbrac{\sigma^j(x)} \]
+where $m_b$ is the largest integer such that $m_b \le (N - b - 1) / r + 1$ 
+\cite{kaye2007introduction}. Descarding the second register leaves the first register in the 
+superposition
+\[ \frac{1}{\sqrt{m_b}} \sum_{z = 0}^{m_b - 1}\ldbrac{zr + b} \]
+where $b \in \Z/r\Z$ is selected nearly uniformly at random. Applying $F_N^{-1}$ and measuring, we 
+obtain an integer $k$ such that $k / N$ is an extimate of $j / r$ for some nearly uniformly random 
+$j \in \Z/r\Z$. More precisly, $\abs{k / N - j / r} \le \frac{1}{2N}$ for some nearly uniformly 
+random $j \in \Z/r\Z$ \cite{kaye2007introduction}. Using rational number reconstruction, we can 
+obtain integeres $j_1, r_1$ such that $j_1 / r_1 = j / r$. Repeating the process, we obtain another 
+such $j_2, r_2$ from which we get $r = \lcm(r_1, r_2)$ with probability $\approx 6 / \pi^2$. 
 
-The action of $\sigma$ as defined in \eqref{equ:sig-act} is a unitary operation. Let 
-$\ldbrac{u_\ell}$ be an eigenstate of $\sigma$ with eigenvalue $\exp(2\pi i\ell / d)$. If we had 
-access to $\ldbrac{u_\ell}$ then we could estimate $\ell / d$ as follows. Let $m$ be a bound on the 
-order of $\sigma$. We can prepare the superposition $\frac{1}{\sqrt{m}}\sum_{j \in 
-\Z/m\Z}\ldbrac{j} 
-\ldbrac{u_\ell}$. Applying $\sigma$ to this state we get 
-\[ \frac{1}{\sqrt{m}}\sum_{j \in \Z/m\Z} \exp(2\pi ij\ell / d) \ldbrac{j} \ldbrac{u_\ell} = 
-\frac{1}{\sqrt{m}}\sum_{j \in \Z/m\Z} \zeta_d^{\ell j} \ldbrac{j} \ldbrac{u_\ell}. \]
 
-Since $\sigma$ is an automorphism, it 
-can be treated as a unitary operator. To estimate the order of $\sigma$, its action is applied as a
-black box. More precisely, we turn $\sigma$ into a black box controlled-$\sigma$ operator such that
-for any integer $j \ge 0$ and any $h \in \K$. Let $d$ be the size of the group $\lrang{\sigma}$. 
-The eigenstates of $\sigma$ are 
-\[ \ldbrac{u_\ell} = \frac{1}{\sqrt{d}} \sum_{j = 0}^{d - 1} \zeta_d^{-j\ell} \ldbrac{\sigma^jx} \]
-which we cannot prepare since we do not know $d$. To avoid preparing $\ldbrac{u_\ell}$, we 
-use the fact that
-\[ \ldbrac{\sigma^jx} = \frac{1}{\sqrt{d}} \sum_{\ell = 0}^{d - 1} \zeta_d^{j\ell} \ldbrac{u_\ell}. 
-\]
-For an eigenstate $\ldbrac{u}$ of $\sigma$, the phase $\lambda_u$ is estimated as a fraction $s / 
-d$ for some positive integer $s < d$. From that, $d$ is recovered using rational function 
-reconstruction. To obtain a $t$-bit estimation of $d$, we need $2t + 1$ qubits to represent 
-$\lambda_u$. For the phase estimation algorithm to succeed with probability at least $1 - \delta$, 
-for any $\delta > 0$, we need an extra $\lceil \log(1 + \frac{1}{2\delta}) \rceil$ qubits. So the 
-total number of qbiuts to successfully obtain a $t$-bit estimation of $\lambda_u$ is $2t + 1 + 
-\lceil \log(1 + \frac{1}{2\delta}) \rceil$. Algorithm \ref{alg:qtm-order} summarizes the quantum 
-order 
-finding for the elements of $\lrang{\pi}$.
 
 \begin{algorithm}[t]
 	\caption{Estimate the order of an automorphism}
@@ -221,38 +190,43 @@ finding for the elements of $\lrang{\pi}$.
 		\Require 
 		\item[-] A squarefree monic polynomial $f \in \F_q[x]$ of degree $n$
 		\item[-] An automorphism $\sigma \in \lrang{\pi}$ of the $\F_q$-algebra $\K = \F_q[x] / f$
-		\item[-] An integer $t$ as a bound for the number of bits by which the order of the 
+		\item[-] An integer $\ell < n$ as a bound for the number of bits by which the order of the 
 		automorphism $\sigma$ is estimated
-		\Ensure A $t$-bit estimation of the order of $\sigma$
-		\State Prepare the initial state $\ldbrac{0}\ldbrac{0}$ of two registers, the first 
-		register of length $2t + 1 + \lceil \log(1 + \frac{1}{2\delta}) \rceil$ qubits and the 
-		second of length $n\lceil \log q \rceil$ qubits.
-		\State Set $m = 2^t$
-		\State Create the superposition $\ldbrac{\theta} = \frac{1}{\sqrt{m}} \sum_{j \in \Z/m\Z} 
-		\ldbrac{j} \ldbrac{0}$ by performing a QFT on the first register
-		\State\label{step:cont-sig} 
-		Apply the controlled-$\sigma$ operator to $\ldbrac{\theta}$ to obtain
-		\[ \frac{1}{\sqrt{m}} \sum_{j \in \Z/m\Z} \ldbrac{j}\ldbrac{\sigma^jx} \approx 
-		\frac{1}{\sqrt{md}} \sum_{\ell = 0}^{d - 1} \sum_{j \in \Z/m\Z} \zeta_d^{j\ell} 
-		\ldbrac{j} \ldbrac{\lambda_\ell} \]
-		\State Apply inverse QFT to the first register to obtain $\frac{1}{\sqrt{d}} \sum_{\ell = 
-			0}^{d - 1} \ldbrac{\widetilde{\ell / d}} \ldbrac{\lambda_\ell}$
-		\State Measure the first register to obtain $\widetilde{\ell / d}$, for some $\ell < d$, 
-		and use rational function reconstruction to obtain $d$
-		\State \Return $d$
+		\Ensure The order $r$ of $\sigma$ or `Fail'
+		\State $m := 2\ell + 1$, $N := 2^m$
+		\State\label{step:superpos}Prepare registers $\ldbrac{0}\ldbrac{0}$ of length $m$ qubits 
+		and $n\lceil \log q \rceil$ qubits repectively.
+		\State\label{step:app-sig}Create a superposition in the first register and apply $\sigma$ 
+		to get
+		\[ \frac{1}{\sqrt{N}} \sum_{j \in \Z/N\Z} \ldbrac{j}\ldbrac{\sigma^j(x)} \]
+		\State\label{step:qft-inv}Discard the second register and apply $F_N^{-1}$ to the frist 
+		register to obtain an integer $k$ such that $j_1 / r_1 = k / N$ is an estimate of $j / r$ 
+		for some nearly uniformly random $j \in \Z/r\Z$
+		\State\label{step:frac-est}Compute $r_1$ using rational number reconstruction
+		\State Repeat Steps \ref{step:superpos}-\ref{step:frac-est} to obtain another $r_2$, 
+		and compute $r = \lcm(r_1, r_2)$
+		\State\label{step:sig-test} If $\sigma^r = \text{id}$ then return $r$, else return `Fail'
 	\end{algorithmic}}
 \end{algorithm}
 
 \begin{proposition}
 	Given a squarefree monic polynomial $f \in \F_q[x]$ of degree $n$, an element $\sigma \in 
-	\lrang{\pi}$ and an integer $t > 0$, Algorithm \ref{alg:qtm-order} computes a $t$-bit 
-	estimation of the order of $\sigma$ with probability $O(1)$ and in $O(tn^{1 + o(1)}\log^{1 + 
-	o(1)}q)$ bit operations.
+	\lrang{\pi}$ and an integer $\ell > 0$, Algorithm \ref{alg:qtm-order} computes the order of 
+	$\sigma$ or fails with probability $O(1)$ and in $O(\ell n^{1 + o(1)}\log^{1 + o(1)}q)$ bit 
+	operations.
 \end{proposition}
 \begin{proof}
-	The runtime is dominated by Step \ref{step:cont-sig} where we need to compute $\sigma^j$. This 
-	can be done in $O(\CC(n)\log j)$ operations in $\F_q$. Since $j < 2^t$ and $\CC(n) \in O(n^{1 + 
-	o(1)}\log^{1 + o(1)}q)$, we get the claimed runtime in bit operations.
+	The quantum Fourier transform $F_N$ and its inverse $F_N^{-1}$ in Steps \ref{step:app-sig} 
+	and \ref{step:qft-inv} are done in $O(\log N \log\log N) = O(\ell\log\ell)$ bit operations 
+	\cite{cleve1998quantum, childs2010quantum}. For an ineteger $j$, the power $\sigma^j$ in Step 
+	\ref{step:app-sig} is computed in $O(\CC(n)\log j)$ operations in $\F_q$. Since $j < 2^\ell$ 
+	and $\CC(n) \in O(n^{1 + o(1)}\log^{1 + o(1)}q)$, Step \ref{step:app-sig} is performed in 
+	$O(\ell n^{1 + o(1)}\log^{1 + o(1)}q)$ bit operations.
+	
+	The rational number reconstruction of Step \ref{step:frac-est} is done at the cost of 
+	$O(\log^{1 + o(1)}N) = O(n^{1 + o(1)})$ bit operations \cite{pan2002acceleration}. Since $r < 
+	2^\ell$, Step \ref{step:sig-test} is done using $O(\ell n^{1 + o(1)}\log^{1 + o(1)}q)$ bit 
+	operations. Adding these together stablishes the claimed complexity.
 \end{proof}
 
 
