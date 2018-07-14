@@ -133,7 +133,7 @@ o(1)}q)$ bit operations.
 
 Given a squarefree polynomial $f \in \F_q[x]$ of degree $n > 1$, let $\K = \F_q[x] / f$. The 
 $\F_q$-endomorphism $\pi: \K \rightarrow \K$ define by $x \mapsto x^q$ is called the Frobenius 
-endomorphism. Since $f$ is squarefree, $\pi$ is an automorphism. The group of automorphism 
+endomorphism. Since $f$ is squarefree, $\pi$ is an automorphism. The cyclic group of automorphisms 
 $\lrang{\pi}$ is finite. We give a quantum algorithm that efficiently estimates the order of any 
 automorphism $\sigma \in \lrang{\pi}$. The quantum algorithm is not new; It is a standard order 
 finding algorithm adapted to our situation. 
@@ -141,11 +141,11 @@ finding algorithm adapted to our situation.
 To find the order of an automorphism $\sigma$ we use the techniques in \cite{kaye2007introduction, 
 nielsen2010quantum}. The group $\lrang{\sigma}$ is isomorphic to the additive group $\Z/r\Z$ for 
 some ineteger $r > 0$. Since the action of $\sigma$ on $\K$ is determined by the action of $\sigma$ 
-on $x$, the powers $\sigma^j$ are represented by polynomials $\sigma^j(x) \in \K$ for all $j \ge 0$. 
-A polynomial $h \in \K$ is represented using an array of size $n$ containing the coefficients of 
-$h$. The number of qubits for representing the elements of $\K$ is then $n\lceil \log q \rceil$. For 
-an integer $j$ and a polynomial $h \in \K$, define the action of $\sigma$ on the state $\ldbrac{j} 
-\ldbrac{h}$ as
+on $x$, the powers $\sigma^j$ are represented by the polynomials $\sigma^j(x) \in \K$ for all $j 
+\ge 0$. A polynomial $h \in \K$ is represented using an array of size $n$ containing the 
+coefficients of $h$. The number of qubits for representing the elements of $\K$ is then $n\lceil 
+\log q \rceil$. For an integer $j$ and a polynomial $h \in \K$, define the action of $\sigma$ on the 
+state $\ldbrac{j} \ldbrac{h}$ as
 \begin{equation}
 	\label{equ:sig-act}
 	\sigma \ldbrac{j}\ldbrac{h} = \ldbrac{j}\ldbrac{\sigma^j(x) \oplus h}
@@ -159,10 +159,11 @@ G}$ to another set of $\abs{G}$ complex numbers \cite{hallgren2003hidden}. We sh
 over the additive group $\Z/N\Z$, denoted by $F_N$, where $N = 2^m$ for some integer $m$. In this 
 case, we have 
 \[ F_N: \ldbrac{k} \longmapsto \frac{1}{\sqrt{N}}\sum_{j \in \Z/N\Z}\zeta_N^{kj}\ldbrac{j} \]
-where $k \in \Z/N\Z$ and $\zeta_N = e^{2\pi i / N} \in \C$. An $\ell$-bit estimate of the order $r$ 
-of $\sigma$ is obtained as follows. Prepare two registers with intial value $\ldbrac{0}\ldbrac{0}$, 
-the first register of length $m = 2\ell + 1$ qubits and the second of length $n\lceil \log q 
-\rceil$ qubits. Create a superposition in the first register to get the state 
+where $k \in \Z/N\Z$ and $\zeta_N = e^{2\pi i / N} \in \C$ is a primitive $N$-th root of unity. 
+Given an ineteger $\ell > 0$, an $\ell$-bit estimate of the order $r$ of $\sigma$ is computed as 
+follows. Prepare two registers with intial value $\ldbrac{0}\ldbrac{0}$, the first register of 
+length $m = 2\ell + 1$ qubits and the second of length $n\lceil \log q \rceil$ qubits. Create a 
+superposition in the first register to get the state 
 \[ \ldbrac{\psi} = \frac{1}{\sqrt{N}} \sum_{j \in \Z/N\Z} \ldbrac{j}\ldbrac{0}. \]
 Applying $\sigma$ to $\ldbrac{\psi}$ and rewriting the resulting sum based on the period $r$ give
 \[ \sigma\ldbrac{\psi} = \frac{1}{\sqrt{N}} \sum_{j \in \Z/N\Z} \ldbrac{j}\ldbrac{\sigma^j(x)} = 
@@ -174,12 +175,12 @@ superposition
 \[ \frac{1}{\sqrt{m_b}} \sum_{z = 0}^{m_b - 1}\ldbrac{zr + b} \]
 where $b \in \Z/r\Z$ is selected nearly uniformly at random. Applying $F_N^{-1}$ and measuring, we 
 obtain an integer $k$ such that $k / N$ is an extimate of $j / r$ for some nearly uniformly random 
-$j \in \Z/r\Z$. More precisly, $\abs{k / N - j / r} \le \frac{1}{2N}$ for some nearly uniformly 
-random $j \in \Z/r\Z$ \cite{kaye2007introduction}. Using rational number reconstruction, we can 
-obtain integeres $j_1, r_1$ such that $j_1 / r_1 = j / r$. Repeating the process, we obtain another 
-such $j_2, r_2$ from which we get $r = \lcm(r_1, r_2)$ with probability $\approx 6 / \pi^2$. 
-
-
+$j \in \Z/r\Z$. More precisly, one can show that $\abs{k / N - j / r} \le \frac{1}{2N}$ for some 
+nearly uniformly random $j \in \Z/r\Z$. Using rational number reconstruction, we can obtain 
+integeres $j_1, r_1$ such that $j_1 / r_1 = j / r$. Repeating the process, we obtain another pair 
+$j_2, r_2$. It can be shown that $r = \lcm(r_1, r_2)$ with probability $\approx 6 / \pi^2$. 
+Therefore, we only need to run the above procedure a constant number of time to obtain $r$ with 
+high probability. This is summarized in Algorithm \ref{alg:qtm-order}.
 
 \begin{algorithm}[t]
 	\caption{Estimate the order of an automorphism}
