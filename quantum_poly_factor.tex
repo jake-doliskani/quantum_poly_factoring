@@ -118,7 +118,7 @@ We present a randomized quantum algorithm for polynomial factorization over fini
 Given a finite finite $\mathbb{F}_q$ and a polynomial $f \in \mathbb{F}_q$, we use a quantum 
 period finding algorithm to compute the degree of the splitting field of $f$ over 
 $\mathbb{F}_q$. We then prove that this informtion is sufficient to completely factor $f$. For 
-any intgere $n > 0$, our algorithm runs in an expexted $O(n^{1 + \varepsilon} \log^{2 + o(1)}q)$ bit 
+any intgere $n > 0$, our algorithm runs in an expexted $O(n^{1 + o(1)} \log^{2 + o(1)}q)$ bit 
 operations for almost all polynomials of degree $n$. For the remainging negligible class of 
 polynomials of degree $n$ our algorithm runs in an expected $O(n^{4 / 3 + o(1)} \log^{2 + 
 o(1)}q)$ bit operations.
@@ -205,7 +205,7 @@ high probability. This is summarized in Algorithm \ref{alg:qtm-order}.
 		for some nearly uniformly random $j \in \Z/r\Z$
 		\State\label{step:frac-est}Compute $r_1$ using rational number reconstruction
 		\State Repeat Steps \ref{step:superpos}-\ref{step:frac-est} to obtain another $r_2$, 
-		and compute $r = \lcm(r_1, r_2)$
+		and compute $r := \lcm(r_1, r_2)$
 		\State\label{step:sig-test} If $\sigma^r = \text{id}$ then return $r$, else return `Fail'
 	\end{algorithmic}}
 \end{algorithm}
@@ -227,7 +227,7 @@ high probability. This is summarized in Algorithm \ref{alg:qtm-order}.
 	The rational number reconstruction of Step \ref{step:frac-est} is done at the cost of 
 	$O(\log^{1 + o(1)}N) = O(n^{1 + o(1)})$ bit operations \cite{pan2002acceleration}. Since $r < 
 	2^\ell$, Step \ref{step:sig-test} is done using $O(\ell n^{1 + o(1)}\log^{1 + o(1)}q)$ bit 
-	operations. Adding these together stablishes the claimed complexity.
+	operations. Adding these together establishes the claimed complexity.
 \end{proof}
 
 
@@ -248,14 +248,15 @@ of $\K$ is the coproduct of the Frobenius automorphisms $\pi_i: x \mapsto x^q$ o
 $\F_q[x] / f_i$. It follows that the order of the group $\lrang{\pi}$ is $d$ as well.
 
 Given $\sigma \in \lrang{\pi}$ of order $d'$, one could compute the exact value of $d'$ using 
-Algorithm \ref{alg:qtm-order} as follows. Start with a small estimation bound $t$ and call the 
-algorithm to obtain a $d'$. If $\sigma^{d'} = \text{id}$ then stop, otherwise set $t := t + 1$ and 
-repeat. This results in too many calls to Algorithm \ref{alg:qtm-order} if $d'$ is too large. It is 
-therefore crucial to know a reasonable bound on the size $d$ of the group $\lrang{\pi}$. To obtain 
-such a bound, one naturally looks at the distinct values of the $d_i$'s above. It turns out that 
-for almost all polynomials $f \in \F_q[x]$ of degree $n$ the degree of the splitting field of $f$ 
-over $\F_q$ is $O(2^{\polylog(n)})$, that is $\log d \in O(\polylog(n))$. In fact, Knopfmacher 
-proves the following rather precise estimate for the number of distinct values of the $d_i$'s.
+Algorithm \ref{alg:qtm-order} as follows. Start with a small estimation bound $\ell$ and call the 
+algorithm with input $(f, \sigma, \ell)$. It the algorithm does not output `Fail' then stop, 
+otherwise set $\ell := \ell + 1$ and repeat. This results in too many calls to Algorithm 
+\ref{alg:qtm-order} if $d'$ is too large. It is therefore crucial to know a reasonable bound on the 
+size $d$ of the group $\lrang{\pi}$. To obtain such a bound, one naturally looks at the distinct 
+values of the $d_i$'s above. It turns out that for almost all polynomials $f \in \F_q[x]$ of degree 
+$n$ the degree of the splitting field of $f$ over $\F_q$ is $O(2^{\polylog(n)})$, that is $\log d 
+\in O(\polylog(n))$. In fact, Knopfmacher proves the following rather precise estimate for the 
+number of distinct values of the $d_i$'s.
 \begin{theorem}[\cite{knopfmacher1999degrees}]
 	\label{thm:d-mean}
 	The number of irreducible factors of a polynomial $f \in \F_q[x]$ of degree $n$ has mean value 
@@ -267,12 +268,12 @@ From Theorem \ref{thm:d-mean} we see that for almost all polynomials $f$ of degr
 \begin{equation}
 	\label{equ:ag-mean}
 	d = \lcm(d_1, \dots, d_k) \le \left( \frac{1}{k} \sum_{i = 1}^rd_i \right)^k \le \left( 
-	\frac{n}{k} \right)^k \approx \left( \frac{n}{\log n} \right)^{\log n} = O(2^{\log^2n}).
+	\frac{n}{k} \right)^k \approx \left( \frac{n}{\log n} \right)^{\log n} = O(2^{\log^2n})
 \end{equation}
-
-Dixon and Panario \cite{dixon2004degree} give a stronger statement for bounds on $d$ based on the 
-analogy between degrees of splitting fields of polynomials of degree $n$ and orders of elements in 
-the \textit{symmetric group} $S_n$ \cite{erdos1965some, erdos1967some}. We state their result here 
+where the first inequality is the arithmetic-geometric mean. Dixon and Panario 
+\cite{dixon2004degree} give a stronger statement for bounds on $d$ based on the analogy between 
+degrees of splitting fields of polynomials of degree $n$ and orders of elements in the 
+\textit{symmetric group} $S_n$ \cite{erdos1965some, erdos1967some}. We state their result here 
 for completeness. Following the notation of \cite{dixon2004degree}, let $\lambda$ be a partition of 
 $n$ of shape $[1^{k_1} 2^{k_2} \dots n^{k_n}]$, i.e., there are $k_i$ parts of size $i$. Define 
 $m(\lambda)$ to be the $\lcm$ of the $i$'s where $k_i \ne 0$. For any $t > 0$ define 
@@ -291,16 +292,16 @@ the parts of $\lambda$. We have
 	In particular, almost all monic polynomials of degree $n$ have splitting fields of degree at 
 	most $\exp((\frac{1}{2} + o(1))\log^2n)$ over $\F_q$ as $n \to \infty$.
 \end{theorem}
-
-
 It follows from the above that for almost all squarefree $f$, the order $d$ of the Frobenius 
-$\sigma$ of $\K$ can be computed in $O(n^{1 + \varepsilon}\log^{1 + o(1)}q)$ bit operations: we simply 
-call Algorithm \ref{alg:qtm-order} with the bound $t = \log^2n$. There are, however, some $f$ for 
-which $d$ can be as large as $\exp(c\sqrt{n \ln n})$ for some constant $c > 0$  
-\cite{erdos1965some}. In this case, Algorithm \ref{alg:qtm-order} computes $d$ in $O(n^{3/2 + 
-o(1)}\log^{1 + o(1)}q)$ bit operations. This is the classical bound for polynomial factorization! 
-We can do better by preprocessing $f$ before calling Algorithm \ref{alg:qtm-order}. We need the 
-following lemma.
+$\sigma$ of $\K$ can be computed in $O(n^{1 + o(1)}\log^{1 + o(1)}q)$ bit operations: we simply 
+call Algorithm \ref{alg:qtm-order} with the bound $\ell = \log^2n$. There are, however, some $f$ 
+for which $d$ can be as large as $\exp(c\sqrt{n \ln n})$ for some constant $c > 0$  
+\cite{erdos1965some}. In this case, the input bound has to be $\ell = c\sqrt{n \ln n}$, so 
+Algorithm \ref{alg:qtm-order} computes $d$ in $O(n^{3/2 + o(1)}\log^{1 + o(1)}q)$ bit operations. 
+This already dashes the hopes of improving upon the classical bound if we ever wanted to use 
+Algorithm \ref{alg:qtm-order} as a subroutine in a polynomial factorization algorithm! Fortunately, 
+this problem can be circumvented by preprocessing $f$ before calling Algorithm \ref{alg:qtm-order}. 
+We need the following lemma.
 \begin{lemma}
 \label{lem:frob-sub-ord}
 	Let $f \in \F_q[x]$ be a squarefree polynomial of degree $n$. Let $\tilde{f}$ be the product of 
@@ -310,9 +311,10 @@ following lemma.
 \end{lemma}
 \begin{proof}
 	Let $\tilde{f} = \tilde{f}_1\tilde{f}_2 \cdots \tilde{f}_r$ be the irreducible factorization of 
-	$g$. Then $d_i = \deg(\tilde{f}_i) > n^{2 / 3}$ and hence $r < n^{1 / 3}$. The degree of the 
-	Frobenius automorphism $\sigma$ of $\F_q[x] / \tilde{f}$ is $d = \lcm(d_1, d_2, \dots, d_r)$, 
-	which is also the degree of the splitting field of $\tilde{f}$ over $\F_q$. We have, as in 
+	$\tilde{f}$. Then $d_i = \deg(\tilde{f}_i) > n^{2 / 3}$ and hence $r < n^{1 / 3}$. The degree 
+	of the Frobenius automorphism $\sigma$ of $\F_q[x] / \tilde{f}$ is $d = \lcm(d_1, d_2, \dots, 
+	d_r)$, which is also the degree of the splitting field of $\tilde{f}$ over $\F_q$. We have, as 
+	in 
 	\eqref{equ:ag-mean},
 	\[ d \le \prod_{i = 1}^rd_i \le \left( \frac{1}{r} \sum_{i = 1}^rd_i \right)^r \le \left( 
 	\frac{n}{r} \right)^r. \]
@@ -321,22 +323,26 @@ following lemma.
 	\[ \left( \frac{n}{r} \right)^r < \left( n^{2 / 3} \right)^{n^{1 / 3}} = \exp\left( \frac{2}{3} 
 	\sqrt[3]{n} \ln n \right). \qedhere \]
 \end{proof}
-Given an $f$ for which $d$ is $O(\exp(c\sqrt{n \ln n}))$ we can first extract all irreducible 
+Given an $f$ for which $d \in O(\exp(c\sqrt{n \ln n}))$, we can first extract all irreducible 
 factor of $f$ of degree at most $n^{2 / 3}$. This can be done using the algorithm of \cite[\S 
 8]{kedlaya2011fast} at the cost of $O(n^{4 / 3 + o(1)}\log^{2 + o(1)}q)$ bit operations. For the 
-remaining polynomial $\tilde{f}$, the order $\tilde{d}$ of the Frobenius of $\F_q[x] / \tilde{f}$ 
-is at most $\exp(\frac{2}{3}\sqrt[3]{n} \ln n)$ by Lemma \ref{lem:frob-sub-ord}. Now, $\tilde{d}$ 
-can be computed in $O(n^{4 / 3 + o(1)}\log^{1 + o(1)}q)$ bit operations using Algorithm 
-\ref{alg:qtm-order}. 
+remaining polynomial $\tilde{f}$, the order $\tilde{d}$ of the Frobenius $\tilde{\sigma}$ of 
+$\F_q[x] / \tilde{f}$ is at most $\exp(\frac{2}{3}\sqrt[3]{n} \ln n)$ by Lemma 
+\ref{lem:frob-sub-ord}. Now, if we call Algorithm \ref{alg:qtm-order} with input $(\tilde{f}, 
+\tilde{\sigma}, \sqrt[3]{n} \ln n)$, we obtain $\tilde{d}$ at the cost of $O(n^{4 / 3 + o(1)}\log^{1 
++ o(1)}q)$ bit operations.
 
 Since $d$ is not known a priori, to compute the exact value of $d$ using Algorithm 
-\ref{alg:qtm-order}, we could set $t \in O(\sqrt{n \log n})$ the maximum possible bound. But, as 
+\ref{alg:qtm-order}, we could set $\ell = c\sqrt{n \log n}$, the maximum possible bound. But, as 
 mentioned above, this results in the exponent $3 / 2$ which is not better than the classical 
 exponent for polynomial factorization. Instead, we do the following. We first call Algorithm 
-\ref{alg:qtm-order} with the bound $t \in O(\log^2n)$ (or $t \in O(\log^cn)$ for any reasonable 
-constant $c \ge 2$). If $\sigma^d = \text{id}$ then we are done. Otherwise, we remove all factors 
-of degree $\le n^{2 / 3}$ from $f$ and call Algorithm \ref{alg:qtm-order} with the bound $t \in 
-O(\sqrt[3]{n} \log n)$. 
+\ref{alg:qtm-order} with the bound $\ell = \log^2n$ (or $\ell = \log^cn$ for any reasonable constant 
+$c \ge 2$). If the output is not `Fail' then we are done. Otherwise, we remove all factors of degree 
+$\le n^{2 / 3}$ from $f$ and call Algorithm \ref{alg:qtm-order} with the bound $\ell = \sqrt[3]{n} 
+\log n$. These remarks are summarized in Algorithm \ref{alg:order}. Note that Algorithm 
+\ref{alg:order} also accepts a bound $\ell$ as an extra parameter. This increases the flexibility 
+of the algorithm that proves useful in later stages of our factorization algorithm, see Algorithm 
+\ref{alg:ddf}.
 
 \begin{algorithm}[t]
 	\caption{Compute the order of a power of the Frobenius}
@@ -347,27 +353,28 @@ O(\sqrt[3]{n} \log n)$.
 		\Require 
 		\item[-] A monic squarefree polynomial $f \in \F_q[x]$ of degree $n$
 		\item[-] An element $\sigma \in \lrang{\pi}$ of the Frobenius group of $\F_q[x] / f$
-		\item[-] A bound $t$
+		\item[-] A bound $\ell$
 		\Ensure A monic polynomial $g \mid f$ and the order of the Frobenius of $\F_q[x] / g$
 		\State Compute an estimate $d$ of $\sigma$ using Algorithm \ref{alg:qtm-order} with input 
-		$(f, \sigma, t)$
-		\If {$\sigma^d = \text{id}$}
+		$(f, \sigma, \ell)$
+		\If {the output is not `Fail'}
 			\State \Return $f, d$
 		\EndIf
 		\State Remove and output all irreducible factors of degree $\le n^{2 / 3}$ from 
 		$f$, and let $\tilde{f}$ be the resulting polynomial
-		\State Set $t = c_1\sqrt[3]{n} \log n$ for a suitable constant $c_1$
-		\State Compute an estimate $\tilde{d}$ of the Frobenius $\sigma$ of $\F_q[x] / \tilde{f}$ 
-		using Algorithm \ref{alg:qtm-order}.
+		\State Set $\tilde{\ell} := \lceil c_1\sqrt[3]{n} \log n \rceil$ for a suitable constant 
+		$c_1$
+		\State Compute an estimate $\tilde{d}$ of the Frobenius $\tilde{\sigma}$ of $\F_q[x] / 
+		\tilde{f}$ using Algorithm \ref{alg:qtm-order}.
 		\State \Return $\tilde{f}, \tilde{d}$
 	\end{algorithmic}}
 \end{algorithm}
 
 \begin{proposition}
 	\label{prop:exact-d}
-	Given a bound $t$, Algorithm \ref{alg:order} runs in
+	Given a bound $\ell$, Algorithm \ref{alg:order} runs in
 	\begin{itemize}
-		\item $O(tn^{1 + \varepsilon}\log^{1 + o(1)}q)$ bit operations if $d \in O(2^t)$, or
+		\item $O(\ell n^{1 + o(1)}\log^{1 + o(1)}q)$ bit operations if $d \in O(2^\ell)$, or
 		\item $O(n^{4 / 3 + o(1)}\log^{2 + o(1)}q)$ bit operations otherwise.
 	\end{itemize}
 \end{proposition}
@@ -380,42 +387,30 @@ O(\sqrt[3]{n} \log n)$.
 
 \section{An algorithm for distinct degree factorization}
 
-In this section, we give an algorithm for the distinct degree
-factorization of a squarefree polynomial $f(x)$ over $\F_q$. This
-procedure invokes the quantum algorithm of the previous section in
-order to determine the order of a power of the Frobenius modulo $f$.
-%% Note that this is the only non-classical component of the algorithm;
-%% in particular, finding a classical counterpart with the same runtime as
-%% in Proposition~\ref{prop:exact-d} would result in a classical
-%% algorithm for polynomial factorization with same runtime as in
-%% Theorem~\ref{theo:main}.
-%%% forgot about integer factorization. Check runtime.
+In this section, we give an algorithm for the distinct degree factorization of a squarefree 
+polynomial $f(x)$ over $\F_q$. This procedure invokes the quantum algorithm of the previous section 
+in order to determine the order of a power of the Frobenius modulo $f$.
 
-Suppose we are given a tuple $(f(x), s)$ where $f(x)$ is the
-polynomial to be factored and $s > 0$ is an integer that divides the
-degrees of all irreducible factors of $f$. The goal is to produce a
-set $T = \{ (f_1, s_1), \dots, (f_k, s_k) \}$ of tuples such that all
-irreducible factors of $f_i$ have degree $s_i$. The $f_i$'s form the
-Distinct Degree Factorization (DDF) of $f$. TODO: do we assume $s_i$'s
-pairwise distinct?
+Suppose we are given a tuple $(f(x), s)$ where $f(x)$ is the polynomial to be factored and $s > 0$ 
+is an integer that divides the degrees of all irreducible factors of $f$. The goal is to produce a
+set $T = \{ (f_1, s_1), \dots, (f_k, s_k) \}$ of tuples such that all irreducible factors of $f_i$ 
+have degree $s_i$. The $f_i$'s form a Distinct Degree Factorization (DDF) of $f$.
 
-Let $\sigma$ be the Frobenius of $\F_q[x] / f$, and set $T =
-\{\}$. Compute the order $d$ of $\tilde{\sigma} = \sigma^s$ and write
-$d = p_1^{e_1} p_2^{e_2} \cdots p_\ell^{e_\ell}$, where $p_i$'s are
-pairwise distinct primes and $e_i$'s are positive integers. Let $d_1, \dots,
-d_k$ be the degrees of irreducible factors of $f$. Since $d =
-\lcm(d_1, \dots, d_k)$ (TODO: not!), each prime power $p_i^{e_i}$ must divide at
-least one of the $d_j$'s. Let
+Let $\sigma$ be the Frobenius of $\F_q[x] / f$, and set $T = \{\}$. Compute the order $d$ of 
+$\tilde{\sigma} = \sigma^s$ and write $d = p_1^{e_1} p_2^{e_2} \cdots p_\ell^{e_\ell}$, where 
+$p_i$'s are pairwise distinct primes and $e_i$'s are positive integers. Let $d_1, \dots,
+d_k$ be the degrees of irreducible factors of $f$. Since $sd = \lcm(d_1, \dots, d_k)$, each prime 
+power $p_i^{e_i}$ must divide at least one of the $d_j$'s. Let 
 \[ g(x) := \gcd(\tilde{\sigma}^{d / \prod_{i = 1}^\ell p_i}(x) - x, f). \]
-Then $g(x)$ is the product of all factors of $f$ with degrees dividing $\prod_{i = 1}^\ell p_i^{e_i 
-- 1}$ (TODO: really? isn't $s$ missing?), and $g_0(x) := f / g$ is the product of factors with degrees a multiple of at least one of 
-the $p_i^{e_i}$. If $g \ne 1$ then add the tuple $(g, s)$ to $T$. To separate all factors with 
-degrees a multiple of $p_1^{e_1}$, we compute
+Then $g(x)$ is the product of all factors of $f$ with degrees dividing $s \prod_{i = 1}^\ell 
+p_i^{e_i - 1}$, and $g_0(x) := f / g$ is the product of factors with degrees a multiple of at least 
+one of the $p_i^{e_i}$. If $g \ne 1$ then add the tuple $(g, s)$ to $T$. To separate all factors 
+with degrees a multiple of $p_1^{e_1}$, we compute
 \[ g_1(x) = \gcd(\tilde{\sigma}^{d / p_1}(x) - x, g_0) \]
 and then $h_1 = g_0 / g_1$. If $g_1$ is a nontrivial factor of $g_0$ then add the tuple $(h_1, 
 sp_1^{e_1})$ to $T$. Otherwise we have $g_1 = 1$, so $p_1^{e_1}$ divides the degrees of all factors 
-of $g_0$. In this case we replace the $g_1$ and $s$ with $g_0$ and $sp_1^{e_1}$ respectively. Now, 
-we separate all factors of $g_1$ with degree a multiple of $p_2^{e_2}$ by computing
+of $g_0$. In this case we replace $g_1$ and $s$ with $g_0$ and $sp_1^{e_1}$ respectively. Now, we 
+separate all factors of $g_1$ with degree a multiple of $p_2^{e_2}$ by computing
 \[ g_2(x) = \gcd(\tilde{\sigma}^{d / p_2}(x) - x, g_1) \]
 and repeating the same process. Doing this for all $i = 2, \dots, \ell$, we get a list of tuples
 \begin{equation}
@@ -423,7 +418,10 @@ and repeating the same process. Doing this for all $i = 2, \dots, \ell$, we get 
 	T = \{ (h_{i_1}, s_{i_1}), \dots, (h_{i_r}, s_{i_r}) \}
 \end{equation}
 such that $h_{i_j}$ is a nontrivial factor of $f$, $s \mid s_{i_j}$ and $s_{i_j}$ divide all 
-irreducible degrees of $h_{i_j}$.
+irreducible degrees of $h_{i_j}$. We have, by construction, $f = h_{i_1}h_{i_2} \cdots h_{i_r}$. 
+Now we can recursively repeat the above process for each of pairs $(h_{i_j}, s_{i_j})$, $j = 1, 
+\dots, r$. Algorithm \ref{alg:ddf} summarizes the above. We need to prove that the algorithm
+terminates and the recursion is not too deep. This is established by the Lemma \ref{lem:depth}.
 
 \begin{algorithm}[t]
 	\caption{DDF}
@@ -443,13 +441,14 @@ irreducible degrees of $h_{i_j}$.
 		\State\label{step:order}Compute the order $d$ of $\tilde{\sigma} \bmod f$ using Algorithm 
 		\ref{alg:order} with inputs $(f, \tilde{\sigma}, \log^2n)$, and let $\tilde{f}$ be the 
 		output polynomial
-		\State\label{step:factor-d}Factor $d$, $d = p_1^{e_1} p_2^{e_2} \cdots p_\ell^{e_\ell}$
+		\State\label{step:factor-d}Factor $d$ and let $d := p_1^{e_1} p_2^{e_2} \cdots 
+		p_\ell^{e_\ell}$
 		\State\label{step:gcd-first}Compute $g(x) := \gcd(\tilde{\sigma}^{d / \prod_{i = 1}^\ell 
 		p_i}(x) - x, f)$ and $g_0(x) := f / g$
-		\State $T = \{\}$
+		\State $T := \{\}$
 		\State If $g \ne 1$ then add $(g, s, n)$ to $T$
 		\For {$i = 1$ to $\ell$ }\label{step:for-ddf}
-			\State Compute $g_i(x) = \gcd(\tilde{\sigma}^{d / p_i}(x) - x, g_{i - 1})$
+			\State Compute $g_i(x) := \gcd(\tilde{\sigma}^{d / p_i}(x) - x, g_{i - 1})$
 			\If {$g_i \ne 1$} 
 				\State Compute $h_i := g_{i - 1} / g_i$ and add the tuple $(h_i, sp_i^{e_i}, n)$ to 
 				$T$
@@ -471,78 +470,35 @@ irreducible degrees of $h_{i_j}$.
 	Let $d'$ be an irreducible degree of $f(x)$ and let $(f(x), 1) = (a_1(x), s_1), (a_2(x), s_2), 
 	\dots, (a_k(x), s_k) = (a_k(x), d')$ be the path to the degree $d'$ part of $f$ generated by 
 	Algorithm \ref{alg:ddf}. Let $d_i$ be the degree of the Frobenius $\sigma^{s_i} \bmod a_i(x)$ 
-	computed in Step \ref{step:order} for $i = 1, \dots, k$. Write $d' = p_1^{\alpha_1} \cdots 
-	p_\ell^{\alpha_\ell}$ where $0 \le \alpha_i \le e_i$ for all $i = 1, \dots, \ell$. Given any 
-	$1 \le j \le k$, write $d_j = p_1^{\beta_1} \cdots p_\ell^{\beta_\ell}$. Then only two things 
-	can happen from $(a_j(x), s_j)$ to $(a_{j + 1}(x), s_{j + 1})$:
+	computed in Step \ref{step:order} for $i = 1, \dots, k$, and let $d_1 := p_1^{e_1} p_2^{e_2} 
+	\cdots p_\ell^{e_\ell}$ be the prime factorization of $d_1$ at Step \ref{step:factor-d}. Write 
+	$d' = p_1^{\alpha_1} \cdots p_\ell^{\alpha_\ell}$ where $0 \le \alpha_i \le e_i$ for all $i 
+	= 1, \dots, \ell$. Now, given $1 \le j \le k$, write $d_j = p_1^{\beta_1} \cdots 
+	p_\ell^{\beta_\ell}$. Then only two things can happen from $(a_j(x), s_j)$ to $(a_{j + 1}(x), 
+	s_{j + 1})$:
 	\begin{enumerate}
-		\item $\alpha_r = \beta_r$ for some $1 \le r \le \ell$. In this case, $ts_j \mid s_{j + 1}$ 
-		for some integer $t > 1$.
-		\item $\alpha_r < \beta_r$ for all $r = 1, \dots, \ell$. In this case, $s_{j + 1} = s_j$ 
-		and $d_j \mid d_{j + 1} / \prod_{i = 1}^\ell p_i = p_1^{\beta_1 - 1} \cdots 
-		p_\ell^{\beta_\ell - 1}$.
+		\item $\alpha_r = \beta_r$ for at least one $1 \le r \le \ell$. In other words, $d'$ is a 
+		multiple of at least one of the prime powers $p_i^{\beta_i}$. In this case, $ts_j \mid s_{j 
+		+ 1}$ for some integer $t > 1$.
+		\item $\alpha_r < \beta_r$ for all $r = 1, \dots, \ell$. In other words, non of the prime 
+		powers $p_i^{\beta_i}$ divides $d'$. In this case, $s_{j + 1} = s_j$ and $d_j \mid d_{j + 
+		1} / \prod_{i = 1}^\ell p_i = p_1^{\beta_1 - 1} \cdots p_\ell^{\beta_\ell - 1}$.
 	\end{enumerate}
 	Since $s_i \le d' \le n$ for all $i = 1, \dots, k$, case 1 can happen at most $\log n$ 
-	number of times. Let $e = \max_{1 \le i \le \ell}\{ e_i \}$ in the prime factorization of $d$. 
-	Since $d_i \le d$ for all $i = 1, \dots, k$, case 2 can also happen at most $e \le \log n$ 
-	number of times. Therefore, $k \in O(\log n)$.
+	number of times. Let $e = \max_{1 \le i \le \ell}\{ e_i \}$. Since $d_i \le d_1$ for all $i = 
+	1, \dots, k$, case 2 can also happen at most $e \le \log n$ number of times. Therefore, we 
+	always have $k \in O(\log n)$.
 \end{proof}
 Given a squarefree polynomial $f \in \F_q[x]$ of degree $n$, calling Algorithm \ref{alg:ddf} with 
-the input tuple $(f, s = 1, n)$ will produce the DDF of $f$. The auxiliary input integer $n$ is to 
-carry information on the bound of Frobenius of the first polynomial $f$ through the recursion 
-stages. When the algorithm is called for the first time, if $d \in O(2^{\log^cn})$ then we 
-could always assume that this bound holds for the subsequent $d$'s in the the next stages of the 
-recursion. This is true since for any input polynomial $g$ of degree $m$ in an intermediate stage 
-of the recursion we have $m < n$ and $g \mid f$ so that the order of the Frobenius of $\F_q[x] / g$ 
-is always bounded by $O(2^{\log^cn})$. 
-
-\begin{theorem}\label{theo:main}
-	Let $f \in \F_q[x]$ be a square free polynomial of degree $n$ and let $d$ be the order of the 
-	Frobenius of $\F_q[x] / f$. Then the runtime of Algorithm \ref{alg:ddf} is
-	\begin{itemize}
-		\item $O(n^{1 + \varepsilon} \log^{2 + o(1)}q)$ bit operations if $d \in O(2^{\log^cn})$, or
-		\item $(n^{4 / 3 + \varepsilon} \log^{2 + o(1)}q)$ otherwise.
-	\end{itemize}
-\end{theorem}
-\begin{proof}
-	Step \ref{step:sigma-s} of the algorithm takes $O(\CC(m)\log s + \MM(m)\log q) = O(\CC(m)\log m 
-	+ \MM(m)\log q)$ operations in $\F_q$ or $O(m^{1 + o(1)}\log^{2 + o(1)}q)$ bit operations. The 
-	cost of Step \ref{step:order} is given by Proposition \ref{prop:exact-d}: if $d \in $ 
-	$O(2^{\log^cn})$ then it takes $O(m^{1 + o(1)} (\log^cn) \log^{1 + o(1)}q)$ bit operations. 
-	Otherwise it takes $O(m^{4 / 3 + \varepsilon} \log^{2 + o(1)}q)$ bit operations. 
-	
-	Since $d$ is smooth, Step \ref{step:factor-d} is done in negligible time. Step 
-	\ref{step:gcd-first} is done in $O(\CC(m)\log d + \MM(m)\log m)$ operations in $\F_q$ or 
-	$O(m^{1 + o(1)}(\log d)\log^{1 + o(1)}q)$ bit operations. For the loop at Step 
-	\ref{step:for-ddf}, we first compute the values $\tilde{\sigma}^{d / p_1}, \dots, 
-	\tilde{\sigma}^{d / p_\ell} \bmod f$ using Proposition \ref{prop:frobs} and then compute the 
-	gcd's. This takes $O(\CC(m)(\log \ell)\log d + \ell\MM(m)\log m)$ operations in $\F_q$. Since 
-	$\ell \in O(\log d / \log\log d)$, the cost is $O(m^{1 + o(1)}(\log d)(\log \log d)\log^{1 + 
-	o(1)}q)$ bit operations.
-	
-	If $d \in O(2^{\log^cn})$ then, by the above, for an input polynomial of degree $m$ the 
-	algorithm takes 
-	\[ U(m) = O(m^{1 + o(1)}\log^{2 + o(1)}q + m^{1 + o(1)}(\log^cn)(\log \log n)\log^{1 + o(1)}q) 
-	\]
-	bit operations before the recursive calls. Let $d = p_1^{e_1} p_2^{e_2} \cdots p_\ell^{e_\ell}$ 
-	be the prime factorization of $d$, and let $T(n)$ be the total cost of the algorithm for an 
-	input polynomial $f$ of degree $n$. Then
-	\begin{equation}
-	\label{equ:cost-ineq}
-		T(n) \le \max_{m_1 + \cdots + m_\ell = n} \{ \sum T(m_i) \} + U(n)
-	\end{equation}
-	where $\{ m_i \}_{1 \le i \le \ell}$ is a partition of irreducible degrees of $f$. Since $U$ is 
-	a super-additive function and, by Lemma \ref{lem:depth}, the depth of the recursion is $O(\log 
-	n)$, we have
-	\[ T(n) \in O(n^{1 + \varepsilon} \log^{2 + o(1)}q). \]
-	If $d \notin O(2^{\log^cn})$ then for an input polynomial of degree $m$ it is always guaranteed 
-	that $\log d \in O(m^{1 / 3 + \varepsilon})$. In this case, the algorithm rakes $U(m) = O(m^{4 / 3 + 
-	o(1)} \log^{2 + o(1)}q)$ bit operations before the recursive calls. Again since $U$ is a 
-	super-additive function and \eqref{equ:cost-ineq} holds, for an input polynomial of degree $n$, 
-	the total cost of the algorithm is
-	\[ T(n) \in O(n^{4 / 3 + \varepsilon} \log^{2 + o(1)}q) \]
-	bit operations.
-\end{proof}
+the input tuple $(f, s = 1, n)$ will produce the DDF of $f$. The auxiliary input integer $n$ is 
+never changed. It is used in Step \ref{step:order} to input the bound $\ell = \log^2n$ to 
+Algorithm \ref{alg:order}. We shall see how this simplifies the complexity analysis of the 
+algorithm. Note that when the algorithm is called for the first time, if $d \in O(2^{\log^2n})$ 
+then we could always assume that this bound holds for the subsequent $d$'s in the the next stages of 
+the recursion: for any input polynomial $g$ of degree $m$ in an intermediate stage we have $m < n$ 
+and $g \mid f$ so that the order of the Frobenius of $\F_q[x] / g$ is always bounded by that of 
+$\F[x] / f$. Let us now analyze the complexity of Algorithm \ref{alg:ddf}. We shall need the 
+following two propositions.
 \begin{proposition}
 	\label{prop:frobs}
 	Given a polynomial $f \in \F_q[x]$ of degree $n$, a power of the Frobenius $\tilde{\sigma}(x) = 
@@ -567,6 +523,84 @@ is always bounded by $O(2^{\log^cn})$.
 	\log d)$ operations in $\F_q$, and $2^j$ polynomial reductions at the cost of $O(2^j\MM(n))$ 
 	operations in $\F_q$. Since the depth of the recursion is $\log \ell$, the claimed runtime 
 	follows.
+\end{proof}
+\begin{proposition}
+	The integer factorization in Step \ref{step:factor-d} of Algorithm \ref{alg:ddf} can be done in 
+	$O(n^{1 + o(1)})$ bit operations.
+\end{proposition}
+\begin{proof}
+	We know that $d$ is $n$-smooth, i.e., $p_i \le n$ for all $i = 1, \dots, \ell$. If $d \in 
+	O(2^{\log^2n})$ then $d$ can be completely factored in $O(n^{1 + o(1)})$ bit operations using a 
+	naive trial division algorithm. So we are left with the case $d \in O(2^{c\sqrt[3]{n} \log 
+	n})$. For this we use a subproduct tree.
+	
+	Let $P = \{ q_1, q_2, \dots, q_s \}$ be the set of all primes $\le n$. The subproduct tree for 
+	the set $P$ is a binary tree described as follows. The roots of the tree is the product $q_1 
+	q_2 \dots q_s$. Now divide the set $P$ into two halves for the left and right subtrees with 
+	roots the products $q_1 q_2 \dots q_{\lceil s / 2 \rceil}$ and $q_{\lceil s / 2 \rceil + 1} 
+	\dots q_s$ respectively. Repeating this this process results in a tree with leaves the primes 
+	in $P$. The tree can be built recursively: the value of a parent node is the product of the 
+	roots of the left and right subtrees. Assuming two $m$-bit integers are multiplied in $O(m^{1 + 
+	o(1)})$ bit operation, it easily seen that each level of the tree is built at the cost of 
+	$O(n^{1 + o(1)})$ bit operations. Since the height of the tree is $O(\log n)$, the total cost 
+	of building the tree is $O(n^{1 + o(1)})$ bit operations.
+	
+	Now, given a subproduct tree $T$ for $P$, we can compute $D = \{ d \bmod p : p \in P \}$ as 
+	follows. We reduce $d$ modulo the root of $T$, and then reduce the resulting value modulo the 
+	roots of the left and right subtrees, and so on. The set $D$ is obtained when we reach the 
+	leaves. Again, the cost of the reductions at each level of $T$, and hence the total cost of 
+	computing $D$, is $O(n^{1 + o(1)})$. From $D$ we get the complete factorization of $d$ at a 
+	negligible cost.
+\end{proof}
+\begin{theorem}\label{theo:main}
+	Let $f \in \F_q[x]$ be a square free polynomial of degree $n$ and let $d$ be the order of the 
+	Frobenius of $\F_q[x] / f$. Then the runtime of Algorithm \ref{alg:ddf} is
+	\begin{itemize}
+		\item $O(n^{1 + o(1)} \log^{2 + o(1)}q)$ bit operations if $d \in O(2^{\log^2n})$, or
+		\item $O(n^{4 / 3 + o(1)} \log^{2 + o(1)}q)$ otherwise.
+	\end{itemize}
+\end{theorem}
+\begin{proof}
+	Step \ref{step:sigma-s} of the algorithm takes $O(\CC(m)\log s + \MM(m)\log q) = O(\CC(m)\log m 
+	+ \MM(m)\log q)$ operations in $\F_q$ or $O(m^{1 + o(1)}\log^{2 + o(1)}q)$ bit operations. The 
+	cost of Step \ref{step:order} is given by Proposition \ref{prop:exact-d}: if $d \in $ 
+	$O(2^{\log^2n})$ then it takes $O(m^{1 + o(1)} (\log^cn) \log^{1 + o(1)}q)$ bit operations. 
+	Otherwise it takes $O(m^{4 / 3 + o(1)} \log^{2 + o(1)}q)$ bit operations. 
+	
+	Since $d$ is smooth, Step \ref{step:factor-d} can be efficiently done. More precisely, we have 
+	$p_i^{e_i} \le n$. 
+	
+	Step 
+	\ref{step:gcd-first} is done in $O(\CC(m)\log d + \MM(m)\log m)$ operations in $\F_q$ or 
+	$O(m^{1 + o(1)}(\log d)\log^{1 + o(1)}q)$ bit operations. For the loop at Step 
+	\ref{step:for-ddf}, we first compute the values $\tilde{\sigma}^{d / p_1}, \dots, 
+	\tilde{\sigma}^{d / p_\ell} \bmod f$ using Proposition \ref{prop:frobs} and then compute the 
+	gcd's. This takes $O(\CC(m)(\log \ell)\log d + \ell\MM(m)\log m)$ operations in $\F_q$. Since 
+	$\ell \in O(\log d / \log\log d)$, the cost is $O(m^{1 + o(1)}(\log d)(\log \log d)\log^{1 + 
+	o(1)}q)$ bit operations.
+	
+	If $d \in O(2^{\log^cn})$ then, by the above, for an input polynomial of degree $m$ the 
+	algorithm takes 
+	\[ U(m) = O(m^{1 + o(1)}\log^{2 + o(1)}q + m^{1 + o(1)}(\log^cn)(\log \log n)\log^{1 + o(1)}q) 
+	\]
+	bit operations before the recursive calls. Let $d = p_1^{e_1} p_2^{e_2} \cdots p_\ell^{e_\ell}$ 
+	be the prime factorization of $d$, and let $T(n)$ be the total cost of the algorithm for an 
+	input polynomial $f$ of degree $n$. Then
+	\begin{equation}
+	\label{equ:cost-ineq}
+		T(n) \le \max_{m_1 + \cdots + m_\ell = n} \{ \sum T(m_i) \} + U(n)
+	\end{equation}
+	where $\{ m_i \}_{1 \le i \le \ell}$ is a partition of irreducible degrees of $f$. Since $U$ is 
+	a super-additive function and, by Lemma \ref{lem:depth}, the depth of the recursion is $O(\log 
+	n)$, we have
+	\[ T(n) \in O(n^{1 + o(1)} \log^{2 + o(1)}q). \]
+	If $d \notin O(2^{\log^cn})$ then for an input polynomial of degree $m$ it is always guaranteed 
+	that $\log d \in O(m^{1 / 3 + o(1)})$. In this case, the algorithm rakes $U(m) = O(m^{4 / 3 + 
+	o(1)} \log^{2 + o(1)}q)$ bit operations before the recursive calls. Again since $U$ is a 
+	super-additive function and \eqref{equ:cost-ineq} holds, for an input polynomial of degree $n$, 
+	the total cost of the algorithm is
+	\[ T(n) \in O(n^{4 / 3 + o(1)} \log^{2 + o(1)}q) \]
+	bit operations.
 \end{proof}
 
 
