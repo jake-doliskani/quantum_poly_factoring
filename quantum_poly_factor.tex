@@ -213,7 +213,7 @@ high probability. This is summarized in Algorithm \ref{alg:qtm-order}.
 \begin{proposition}
 	Given a squarefree monic polynomial $f \in \F_q[x]$ of degree $n$, an element $\sigma \in 
 	\lrang{\pi}$ and an integer $\ell > 0$, Algorithm \ref{alg:qtm-order} computes the order of 
-	$\sigma$ or fails with probability $O(1)$ and in $O(\ell n^{1 + o(1)}\log^{1 + o(1)}q)$ bit 
+	$\sigma$, or fails, with probability $O(1)$ and in $O(\ell n^{1 + o(1)}\log^{1 + o(1)}q)$ bit 
 	operations.
 \end{proposition}
 \begin{proof}
@@ -501,9 +501,9 @@ $\F[x] / f$. Let us now analyze the complexity of Algorithm \ref{alg:ddf}. We sh
 following two propositions.
 \begin{proposition}
 	\label{prop:frobs}
-	Given a polynomial $f \in \F_q[x]$ of degree $n$, a power of the Frobenius $\tilde{\sigma}(x) = 
-	x^{q^t}$ of $\F_q[x] / f$, and an integer $d = p_1^{e_1} p_2^{e_2} \cdots p_\ell^{e_\ell}$ in a 
-	factored form, the sequence
+	Given a polynomial $f \in \F_q[x]$ of degree $n$, a power $\tilde{\sigma}(x) = x^{q^t}$ of 
+	the Frobenius of $\F_q[x] / f$, and an integer $d = p_1^{e_1} p_2^{e_2} \cdots p_\ell^{e_\ell}$ 
+	in the factored form, the sequence
 	\begin{equation}
 	\label{equ:frobs}
 		\tilde{\sigma}^{d / p_1}(x) \bmod f, \dots, \tilde{\sigma}^{d / p_\ell}(x) \bmod f
@@ -519,12 +519,14 @@ following two propositions.
 	\tilde{\sigma}^{d_2} \}$. The problem $\{ p_i^{e_i}, [i, i], \tilde{\sigma}^{d / p_i^{e_i}} \}$ 
 	is solved by simply raising $\tilde{\sigma}^{d / p_i^{e_i}}$ to the power $p_i^{e_i - 1}$.
 	
-	At step $j$ of the recursion, we perform $\log d$ modular compositions at the cost of $O(\CC(n) 
-	\log d)$ operations in $\F_q$, and $2^j$ polynomial reductions at the cost of $O(2^j\MM(n))$ 
-	operations in $\F_q$. Since the depth of the recursion is $\log \ell$, the claimed runtime 
-	follows.
+	Computing the powers of the Frobenius is done using modular composition. At any level of the 
+	recursions, the total number of modular compositions is $O(\log d)$. Therefore, at level $j$ we 
+	spend $O(\CC(n) \log d)$ operations in $\F_q$ on modular compositions, and $O(2^j\MM(n))$ 
+	operations in $\F_q$ on $2^j$ polynomial reductions. Since the depth of the recursion is $\log 
+	\ell$, the 	claimed runtime follows.
 \end{proof}
 \begin{proposition}
+	\label{prop:factor-d}
 	The integer factorization in Step \ref{step:factor-d} of Algorithm \ref{alg:ddf} can be done in 
 	$O(n^{1 + o(1)})$ bit operations.
 \end{proposition}
@@ -532,15 +534,15 @@ following two propositions.
 	We know that $d$ is $n$-smooth, i.e., $p_i \le n$ for all $i = 1, \dots, \ell$. If $d \in 
 	O(2^{\log^2n})$ then $d$ can be completely factored in $O(n^{1 + o(1)})$ bit operations using a 
 	naive trial division algorithm. So we are left with the case $d \in O(2^{c\sqrt[3]{n} \log 
-	n})$. For this we use a subproduct tree.
+	n})$. For this we use a \textit{subproduct tree}.
 	
 	Let $P = \{ q_1, q_2, \dots, q_s \}$ be the set of all primes $\le n$. The subproduct tree for 
-	the set $P$ is a binary tree described as follows. The roots of the tree is the product $q_1 
-	q_2 \dots q_s$. Now divide the set $P$ into two halves for the left and right subtrees with 
-	roots the products $q_1 q_2 \dots q_{\lceil s / 2 \rceil}$ and $q_{\lceil s / 2 \rceil + 1} 
-	\dots q_s$ respectively. Repeating this this process results in a tree with leaves the primes 
-	in $P$. The tree can be built recursively: the value of a parent node is the product of the 
-	roots of the left and right subtrees. Assuming two $m$-bit integers are multiplied in $O(m^{1 + 
+	the set $P$ is a binary tree described as follows. The root of the tree is the product $q_1 q_2 
+	\dots q_s$. Now divide the set $P$ into two halves for the left and right subtrees with roots 
+	the products $q_1 q_2 \dots q_{\lceil s / 2 \rceil}$ and $q_{\lceil s / 2 \rceil + 1} \dots 
+	q_s$ respectively. Repeating this this process results in a tree with leaves the primes in 
+	$P$. The tree can be built recursively: the value of a parent node is the product of the roots 
+	of the left and right subtrees. Assuming two $m$-bit integers are multiplied in $O(m^{1 + 
 	o(1)})$ bit operation, it easily seen that each level of the tree is built at the cost of 
 	$O(n^{1 + o(1)})$ bit operations. Since the height of the tree is $O(\log n)$, the total cost 
 	of building the tree is $O(n^{1 + o(1)})$ bit operations.
@@ -552,6 +554,12 @@ following two propositions.
 	computing $D$, is $O(n^{1 + o(1)})$. From $D$ we get the complete factorization of $d$ at a 
 	negligible cost.
 \end{proof}
+\begin{remark}
+	Another way of factoring $d$ in Proposition \ref{prop:factor-d} is to use a quantum factoring 
+	algorithm, see \cite{kaye2007introduction}. A nontrivial factor of $d$ can be found in time 
+	$O(\log^{2 + o(1)}d)$ bit operations. So a full factorization requires $O(\log^{3 + o(1)}d) 
+	= O(n^{1 + o(1)})$ bit operations. 
+\end{remark}
 \begin{theorem}\label{theo:main}
 	Let $f \in \F_q[x]$ be a square free polynomial of degree $n$ and let $d$ be the order of the 
 	Frobenius of $\F_q[x] / f$. Then the runtime of Algorithm \ref{alg:ddf} is
@@ -564,24 +572,23 @@ following two propositions.
 	Step \ref{step:sigma-s} of the algorithm takes $O(\CC(m)\log s + \MM(m)\log q) = O(\CC(m)\log m 
 	+ \MM(m)\log q)$ operations in $\F_q$ or $O(m^{1 + o(1)}\log^{2 + o(1)}q)$ bit operations. The 
 	cost of Step \ref{step:order} is given by Proposition \ref{prop:exact-d}: if $d \in $ 
-	$O(2^{\log^2n})$ then it takes $O(m^{1 + o(1)} (\log^cn) \log^{1 + o(1)}q)$ bit operations. 
-	Otherwise it takes $O(m^{4 / 3 + o(1)} \log^{2 + o(1)}q)$ bit operations. 
+	$O(2^{\log^2n})$ then it takes $O(m^{1 + o(1)} (\log^2n) \log^{1 + o(1)}q)$ bit operations. 
+	Otherwise it takes $O(m^{4 / 3 + o(1)} \log^{2 + o(1)}q)$ bit operations. Step 
+	\ref{step:factor-d} can be done in $O(n^{1 + o(1)})$ bit operations according to Proposition 
+	\ref{prop:factor-d}. 
 	
-	Since $d$ is smooth, Step \ref{step:factor-d} can be efficiently done. More precisely, we have 
-	$p_i^{e_i} \le n$. 
-	
-	Step 
-	\ref{step:gcd-first} is done in $O(\CC(m)\log d + \MM(m)\log m)$ operations in $\F_q$ or 
-	$O(m^{1 + o(1)}(\log d)\log^{1 + o(1)}q)$ bit operations. For the loop at Step 
+	Step \ref{step:gcd-first} is done in $O(\CC(m)\log d + \MM(m)\log m)$ operations in $\F_q$ 
+	or $O(m^{1 + o(1)}(\log d)\log^{1 + o(1)}q)$ bit operations. For the loop at Step 
 	\ref{step:for-ddf}, we first compute the values $\tilde{\sigma}^{d / p_1}, \dots, 
 	\tilde{\sigma}^{d / p_\ell} \bmod f$ using Proposition \ref{prop:frobs} and then compute the 
 	gcd's. This takes $O(\CC(m)(\log \ell)\log d + \ell\MM(m)\log m)$ operations in $\F_q$. Since 
 	$\ell \in O(\log d / \log\log d)$, the cost is $O(m^{1 + o(1)}(\log d)(\log \log d)\log^{1 + 
 	o(1)}q)$ bit operations.
 	
-	If $d \in O(2^{\log^cn})$ then, by the above, for an input polynomial of degree $m$ the 
+	If $d \in O(2^{\log^2n})$ then, by the above, for an input polynomial of degree $m$ the 
 	algorithm takes 
-	\[ U(m) = O(m^{1 + o(1)}\log^{2 + o(1)}q + m^{1 + o(1)}(\log^cn)(\log \log n)\log^{1 + o(1)}q) 
+	\[ U(m) = O(m^{1 + o(1)}\log^{2 + o(1)}q + m^{1 + o(1)}(\log^2n)(\log \log n)\log^{1 + o(1)}q + 
+	n^{1 + o(1)})
 	\]
 	bit operations before the recursive calls. Let $d = p_1^{e_1} p_2^{e_2} \cdots p_\ell^{e_\ell}$ 
 	be the prime factorization of $d$, and let $T(n)$ be the total cost of the algorithm for an 
@@ -596,9 +603,9 @@ following two propositions.
 	\[ T(n) \in O(n^{1 + o(1)} \log^{2 + o(1)}q). \]
 	If $d \notin O(2^{\log^cn})$ then for an input polynomial of degree $m$ it is always guaranteed 
 	that $\log d \in O(m^{1 / 3 + o(1)})$. In this case, the algorithm rakes $U(m) = O(m^{4 / 3 + 
-	o(1)} \log^{2 + o(1)}q)$ bit operations before the recursive calls. Again since $U$ is a 
-	super-additive function and \eqref{equ:cost-ineq} holds, for an input polynomial of degree $n$, 
-	the total cost of the algorithm is
+	o(1)} \log^{2 + o(1)}q  + n^{1 + o(1)})$ bit operations before the recursive calls. Again since 
+	$U$ is a super-additive function and \eqref{equ:cost-ineq} holds, for an input polynomial of 
+	degree $n$, the total cost of the algorithm is
 	\[ T(n) \in O(n^{4 / 3 + o(1)} \log^{2 + o(1)}q) \]
 	bit operations.
 \end{proof}
