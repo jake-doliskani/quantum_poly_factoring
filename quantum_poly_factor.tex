@@ -128,6 +128,33 @@ o(1)}q)$ bit operations.
 %/////////////////////////////////////////////////////
 
 
+\section{Introduction}
+\label{sec:intro}
+
+Factoring polynomials over finite fields has been known to be randomized polynomial time in the 
+seminal work of Berlekamp \cite{Berlekamp70}. Various improvements on polynomial factorization, 
+over many decades, have been made since Berlekamp's work. Two major steps were taken by 
+\cite{cantor1981new} and \cite{von1992computing}; In the latter, von zur Gathen and Shoup proposed 
+an efficient way of computing the traces and powers of the Frobenius map in the polynomial ring 
+modulo the input polynomial. Their algorithm is quasi-quadratic in the degree of the polynomial to 
+be factored. Kaltofen and Shoup proposed a baby-step giant-step technique combined with an 
+efficient method of computing simultaneous modular compositions that led to the first subquadratic 
+algorithm for polynomial factorization \cite{KaSh98}. The complexity of their algorithm is 
+$O(n^{1.815}\log q)$ finite field operations. 
+
+The best known algorithm, as of now, is an implementation of the Kaltofen-Shoup algorithm due to 
+Kedlaya and Umans \cite{kedlaya2011fast}. They proposed a fast algorithm for modular composition 
+that when plagued into the Kaltofen-Shoup algorithm leads to an algorithm with complexity 
+$O(n^{3/2 + o(1)} (\log q)^{1 + o(1)} + n^{1 + o(1)}(\log q)^{2 + o(1)})$ bit operations. A recent 
+result of Doliskani \textit{et al.}\,\cite{doliskani2017drinfeld} achieves the same complexity by 
+exploiting some geometric properties of Rank 2 Drinfeld modules.
+
+
+
+
+%/////////////////////////////////////////////////////
+
+
 \section{Estimating the order of an automorphism}
 \label{sec:ord-frob}
 
