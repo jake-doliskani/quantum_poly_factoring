@@ -145,10 +145,49 @@ $O(n^{1.815}\log q)$ finite field operations.
 The best known algorithm, as of now, is an implementation of the Kaltofen-Shoup algorithm due to 
 Kedlaya and Umans \cite{kedlaya2011fast}. They proposed a fast algorithm for modular composition 
 that when plagued into the Kaltofen-Shoup algorithm leads to an algorithm with complexity 
-$O(n^{3/2 + o(1)} (\log q)^{1 + o(1)} + n^{1 + o(1)}(\log q)^{2 + o(1)})$ bit operations. A recent 
+$O(n^{3/2 + o(1)}\log^{1 + o(1)}q + n^{1 + o(1)}\log^{2 + o(1)}q)$ bit operations. A recent 
 result of Doliskani \textit{et al.}\,\cite{doliskani2017drinfeld} achieves the same complexity by 
-exploiting some geometric properties of Rank 2 Drinfeld modules.
+exploiting some geometric properties of Rank 2 Drinfeld modules. Despite much effort, improving the 
+exponent $3 / 2$ has remained an open problem. Guo \textit{et al.}\,\cite{guo2016alg} propose a set 
+of algebraic problems that are equivalent to improving the exponent $3 / 2$ in polynomial 
+factorization. In this paper, we propose a quantum algorithm that improves this bound. Our main 
+result is as follows:
+\begin{theorem}
+	\label{thm:main}
+	Let $\F_q$ be a finite field, where $q$ is a power of a prime $p$, and let $n$ be a positive 
+	integer. Let $\mathcal{C}_n$ be the set of all polynomials of degree $n$ over $\F_q$. There is 
+	a randomized quantum algorithm for polynomial factorization over $\F_q$, that for all but a 
+	negligible subset $\mathcal{B}_n$ of polynomials in $\mathcal{C}_n$ runs in an expected 
+	$O(n^{1 + o(1)} \log^{2 + o(1)}q)$ bit operations. For the subset $\mathcal{B}_n$ the algorithm 
+	runs in an expected $O(n^{4 / 3 + o(1)} \log^{2 + o(1)}q)$ bit operations.
+\end{theorem}
+It follows from Theorem \ref{thm:main} that the average-case runtime of the proposed algorithm for 
+polynomials of degree $n$ is $O(n^{1 + o(1)} \log^{2 + o(1)}q)$ bit operations. This is essentially 
+optimal with respect to the degree of the input. For a complete polynomial factorization algorithm 
+we follow the Cantor-Zassenhaus scheme which consists of three stages:
+\begin{description}
+	\item[SFF] Squarefree factorization: Given a polynomial $f \in \F_q[x]$, outputs a set of 
+	squarefree polynomials $f_1, \dots, f_r$ such that $f = f_1 f_2^2 \cdots f_r^r$.
+	\item[DDF] Distinct-degree factorization: Given a squarefree polynomial $f \in \F_q[x]$, 
+	outputs $f^{[1]}, \dots, f^{[n]}$ such that $f^{[i]}$ is the product of all monic irreducible	
+	factors of $f$ of degree $i$ for all $i = 1, \dots, n$. The inputs of this stage are the 
+	outputs of the SFF stage.
+	\item[EDF] Equal-degree factorization: Given a squarefree polynomial $f \in \F_q[x]$ such that
+	all irreducible factors of $f$ have the same degree, outputs the irreducible factors of $f$. 
+	The inputs of this stage are the outputs of the DDF stage.
+\end{description}
+The SFF stage cane done using an algorithm of Yun \cite{yun1976square} which takes $O(n^{1 + 
+o(1)}\log^{1 + o(1)}q + n\log^{2 + o(1)}q)$ bit operations. For EDF stage the probabilistic 
+algorithm of von zur Gathen and Shoup \cite{von1992computing} takes an expected $O(n^{1 + 
+o(1)}\log^{2 + o(1)}q)$ bit operations. The bottleneck of polynomial factorization is the DDF 
+stage for which the best know algorithm takes $O(n^{3/2 + o(1)}\log^{1 + o(1)}q + n^{1 + o(1)} 
+\log^{2 + o(1)}q)$ bit operations \cite{kedlaya2011fast}. Therefore, to asymptotically improve the 
+complete factorization algorithm we shall focus only on the DDF stage.
 
+\paragraph{Our technique.}
+Given a squarefree monic polynomial $f \in \F_q[x]$ of degree $n$, let $\K = \F_q[x] / f$. The 
+Frobenius automorphism $\pi: \K \rightarrow \K$ is an $\F_q$ homomorphism defined by $x \mapsto 
+x^q$.  
 
 
 
