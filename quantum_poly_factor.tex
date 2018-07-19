@@ -97,7 +97,7 @@
 
 
 
-\title{A Quantum Algorithm for Polynomial Factorization}
+\title{Toward an Optimal Quantum Algorithm for Polynomial Factorization over Finite Fields}
 
 \author[1]{Javad Doliskani}
 \affil[1]{\small Institute for Quantum Computing, University of Waterloo}
@@ -114,14 +114,12 @@
 \maketitle
 
 \begin{abstract}
-We present a randomized quantum algorithm for polynomial factorization over finite fields. 
-Given a finite finite $\mathbb{F}_q$ and a polynomial $f \in \mathbb{F}_q$, we use a quantum 
-period finding algorithm to compute the degree of the splitting field of $f$ over 
-$\mathbb{F}_q$. We then prove that this informtion is sufficient to completely factor $f$. For 
-any intgere $n > 0$, our algorithm runs in an expexted $O(n^{1 + o(1)} \log^{2 + o(1)}q)$ bit 
-operations for almost all polynomials of degree $n$. For the remainging negligible class of 
-polynomials of degree $n$ our algorithm runs in an expected $O(n^{4 / 3 + o(1)} \log^{2 + 
-o(1)}q)$ bit operations.
+	We present a randomized quantum algorithm for polynomial factorization over finite fields. For 
+	polynomials of degree $n$ over a finite field $\F_q$, the average-case complexity of our 
+	algorithm is an expected $O(n^{1 + o(1)} \log^{2 + o(1)}q)$ bit operations. Only for a 
+	negligible subset of polynomials of degree $n$ our algorithm has a higher complexity of $O(n^{4 
+	/ 3 + o(1)} \log^{2 + o(1)}q)$ bit operations. This breaks the classical $3/2$-exponent 
+	barrier for polynomial factorization over finite fields.
 \end{abstract}
 
 
@@ -184,10 +182,35 @@ stage for which the best know algorithm takes $O(n^{3/2 + o(1)}\log^{1 + o(1)}q 
 \log^{2 + o(1)}q)$ bit operations \cite{kedlaya2011fast}. Therefore, to asymptotically improve the 
 complete factorization algorithm we shall focus only on the DDF stage.
 
+\paragraph{Complexity model.}
+We will only count the number of bit operations in our complexity estimates. Two $n$-bit integers 
+can be multiplied in $O(n\log n \log\log n) = O(n^{1 + o(1)})$ bit operations \cite{vzGG}. Given 
+two polynomials $f, g$ of degree $n$ over a ring $R$, the product $fg$ can be computed in $\MM(n) = 
+O(n\log n \log\log n) = O(n^{1 + o(1)})$ operations in $R$ \cite{vzGG}. Sometimes it is more 
+convenient to count operations in the base field $\F_q$. To convert to bit operations we always 
+assume that $\F_q$ is represented by a quotient $\F_p[y] / h(y)$ for some polynomial $h \in \F_p[y]$ 
+of degree $m$. The product of two elements of $\F_q$ can then be computed in $O(m^{1 + o(1)}\log^{1 
++ o(1)}p) = O(\log^{1 + o(1)}q)$ bit operations. For polynomials $f, g, h \in \F_q[x]$ of degree 
+$n$, the modular polynomial composition $f(g) \bmod h$ can be done in $\CC(n) = O(n^{1 + o(1)} 
+\log^{1 + o(1)}q)$ bit operations \cite{kedlaya2011fast}. Other operations such as $\gcd$ and 
+reduction of polynomials of degree $n$ over $\F_q$ can be done in $O(n^{1 + o(1)} \log^{1 + 
+o(1)}q)$ bit operations \cite{vzGG}. 
+
+Given a polynomial $f \in \F_q[x]$ of degree $n$, define $\K = \F_q[x] / f$. The Frobenius 
+endomorphism $\pi: \K \rightarrow \K$ is an $\F_q$ homomorphism defined by $x \mapsto x^q$. Given 
+$\pi(x)$ and any integer $j > 0$, the power $\pi^{j}(x)$, which is $j$ successive compositions, can 
+be computed using a simple binary-powering algorithm at the cost of $O(\CC(n) \log j) = O(n^{1 + 
+o(1)} \log j \log^{1 + o(1)}q)$ bit operations. The polynomial $\pi(x) = x^q \bmod f$ can itself be 
+computed in $O(n^{1 + o(1)} \log^{2 + o(1)}q)$ bit operations.
+
 \paragraph{Our technique.}
-Given a squarefree monic polynomial $f \in \F_q[x]$ of degree $n$, let $\K = \F_q[x] / f$. The 
-Frobenius automorphism $\pi: \K \rightarrow \K$ is an $\F_q$ homomorphism defined by $x \mapsto 
-x^q$.  
+Let $f \in \F_q[x]$ be a squarefree monic polynomial of degree $n$, and let $d$ be the degree of the 
+splitting of $f$ over $\F_q$. Then the degrees of the irreducible factors of $f$ divide $d$. We show 
+that given $d$, one can efficiently compute a distinct-degree factorization of $f$. This reduces 
+polynomial factorization to computation of splitting degrees. Computing the splitting degree of $f$ 
+is equivalent to computing the order of the Frobenius automorphism $\pi$, defined above, in the 
+automorphism group $\Aut(\K / \F_q)$. To compute the order of $\pi$, we use a quantum period 
+finding algorithm. 
 
 
 
