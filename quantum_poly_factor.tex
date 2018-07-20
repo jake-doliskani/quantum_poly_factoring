@@ -119,7 +119,7 @@
 	algorithm is an expected $O(n^{1 + o(1)} \log^{2 + o(1)}q)$ bit operations. Only for a 
 	negligible subset of polynomials of degree $n$ our algorithm has a higher complexity of $O(n^{4 
 	/ 3 + o(1)} \log^{2 + o(1)}q)$ bit operations. This breaks the classical $3/2$-exponent 
-	barrier for polynomial factorization over finite fields.
+	barrier for polynomial factorization over finite fields \cite{guo2016alg}.
 \end{abstract}
 
 
@@ -133,12 +133,12 @@ Factoring polynomials over finite fields has been known to be randomized polynom
 seminal work of Berlekamp \cite{Berlekamp70}. Various improvements on polynomial factorization, 
 over many decades, have been made since Berlekamp's work. Two major steps were taken by 
 \cite{cantor1981new} and \cite{von1992computing}; In the latter, von zur Gathen and Shoup proposed 
-an efficient way of computing the traces and powers of the Frobenius map in the polynomial ring 
-modulo the input polynomial. Their algorithm is quasi-quadratic in the degree of the polynomial to 
-be factored. Kaltofen and Shoup proposed a baby-step giant-step technique combined with an 
-efficient method of computing simultaneous modular compositions that led to the first subquadratic 
-algorithm for polynomial factorization \cite{KaSh98}. The complexity of their algorithm is 
-$O(n^{1.815}\log q)$ finite field operations. 
+an efficient way of computing traces and powers of the Frobenius map in the polynomial ring modulo 
+the input polynomial. Their algorithm is quasi-quadratic in the degree of the polynomial to be 
+factored. Kaltofen and Shoup proposed a baby-step giant-step technique combined with an efficient 
+method of computing simultaneous modular compositions that led to the first subquadratic algorithm 
+for polynomial factorization \cite{KaSh98}. The complexity of their algorithm is $O(n^{1.815}\log 
+q)$ finite field operations. 
 
 The best known algorithm, as of now, is an implementation of the Kaltofen-Shoup algorithm due to 
 Kedlaya and Umans \cite{kedlaya2011fast}. They proposed a fast algorithm for modular composition 
@@ -174,8 +174,8 @@ we follow the Cantor-Zassenhaus scheme which consists of three stages:
 	all irreducible factors of $f$ have the same degree, outputs the irreducible factors of $f$. 
 	The inputs of this stage are the outputs of the DDF stage.
 \end{description}
-The SFF stage cane done using an algorithm of Yun \cite{yun1976square} which takes $O(n^{1 + 
-o(1)}\log^{1 + o(1)}q + n\log^{2 + o(1)}q)$ bit operations. For EDF stage the probabilistic 
+The SFF stage cane be done using an algorithm of Yun \cite{yun1976square} which takes $O(n^{1 + 
+o(1)}\log^{1 + o(1)}q + n\log^{2 + o(1)}q)$ bit operations. For the EDF stage the probabilistic 
 algorithm of von zur Gathen and Shoup \cite{von1992computing} takes an expected $O(n^{1 + 
 o(1)}\log^{2 + o(1)}q)$ bit operations. The bottleneck of polynomial factorization is the DDF 
 stage for which the best know algorithm takes $O(n^{3/2 + o(1)}\log^{1 + o(1)}q + n^{1 + o(1)} 
@@ -183,7 +183,7 @@ stage for which the best know algorithm takes $O(n^{3/2 + o(1)}\log^{1 + o(1)}q 
 complete factorization algorithm we shall focus only on the DDF stage.
 
 \paragraph{Complexity model.}
-We will only count the number of bit operations in our complexity estimates. Two $n$-bit integers 
+We will always count the number of bit operations in our complexity estimates. Two $n$-bit integers 
 can be multiplied in $O(n\log n \log\log n) = O(n^{1 + o(1)})$ bit operations \cite{vzGG}. Given 
 two polynomials $f, g$ of degree $n$ over a ring $R$, the product $fg$ can be computed in $\MM(n) = 
 O(n\log n \log\log n) = O(n^{1 + o(1)})$ operations in $R$ \cite{vzGG}. Sometimes it is more 
@@ -197,11 +197,11 @@ reduction of polynomials of degree $n$ over $\F_q$ can be done in $O(n^{1 + o(1)
 o(1)}q)$ bit operations \cite{vzGG}. 
 
 Given a polynomial $f \in \F_q[x]$ of degree $n$, define $\K = \F_q[x] / f$. The Frobenius 
-endomorphism $\pi: \K \rightarrow \K$ is an $\F_q$ homomorphism defined by $x \mapsto x^q$. Given 
+endomorphism $\pi: \K \rightarrow \K$ is an $\F_q$-homomorphism defined by $x \mapsto x^q$. Given 
 $\pi(x)$ and any integer $j > 0$, the power $\pi^{j}(x)$, which is $j$ successive compositions, can 
 be computed using a simple binary-powering algorithm at the cost of $O(\CC(n) \log j) = O(n^{1 + 
-o(1)} \log j \log^{1 + o(1)}q)$ bit operations. The polynomial $\pi(x) = x^q \bmod f$ can itself be 
-computed in $O(n^{1 + o(1)} \log^{2 + o(1)}q)$ bit operations.
+o(1)} (\log j) \log^{1 + o(1)}q)$ bit operations. The polynomial $\pi(x) = x^q \bmod f$ can itself 
+be computed in $O(n^{1 + o(1)} \log^{2 + o(1)}q)$ bit operations.
 
 \paragraph{Our technique.}
 Let $f \in \F_q[x]$ be a squarefree monic polynomial of degree $n$, and let $d$ be the degree of the 
