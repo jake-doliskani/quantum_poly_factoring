@@ -204,13 +204,15 @@ o(1)} (\log j) \log^{1 + o(1)}q)$ bit operations. The polynomial $\pi(x) = x^q \
 be computed in $O(n^{1 + o(1)} \log^{2 + o(1)}q)$ bit operations.
 
 \paragraph{Our technique.}
-Let $f \in \F_q[x]$ be a squarefree monic polynomial of degree $n$, and let $d$ be the degree of the 
-splitting of $f$ over $\F_q$. Then the degrees of the irreducible factors of $f$ divide $d$. We show 
-that given $d$, one can efficiently compute a distinct-degree factorization of $f$. This reduces 
-polynomial factorization to computation of splitting degrees. Computing the splitting degree of $f$ 
-is equivalent to computing the order of the Frobenius automorphism $\pi$, defined above, in the 
-automorphism group $\Aut(\K / \F_q)$. To compute the order of $\pi$, we use a quantum period 
-finding algorithm. 
+The exponent $3/2$, achieved by the best previous algorithms for polynomial factorization, seems to 
+be a natural outcome of the so called baby-step giant-step methodology. We take a completely 
+different approach here. Let $f \in \F_q[x]$ be a squarefree monic polynomial of degree $n$, and let 
+$d$ be the degree of the splitting of $f$ over $\F_q$. Then the degrees of the irreducible factors 
+of $f$ divide $d$. We show that given $d$, one can efficiently compute a distinct-degree 
+factorization of $f$. This reduces polynomial factorization to computation of splitting degrees. 
+Computing the splitting degree of $f$ is equivalent to computing the order of the Frobenius 
+automorphism $\pi$, defined above, in the automorphism group $\Aut(\K / \F_q)$. To compute the order 
+of $\pi$, we use a quantum period finding algorithm. 
 
 
 
@@ -249,24 +251,24 @@ over the additive group $\Z/N\Z$, denoted by $F_N$, where $N = 2^m$ for some int
 case, we have 
 \[ F_N: \ldbrac{k} \longmapsto \frac{1}{\sqrt{N}}\sum_{j \in \Z/N\Z}\zeta_N^{kj}\ldbrac{j} \]
 where $k \in \Z/N\Z$ and $\zeta_N = e^{2\pi i / N} \in \C$ is a primitive $N$-th root of unity. 
-Given an ineteger $\ell > 0$, an $\ell$-bit estimate of the order $r$ of $\sigma$ is computed as 
-follows. Prepare two registers with intial value $\ldbrac{0}\ldbrac{0}$, the first register of 
+Given an integer $\ell > 0$, an $\ell$-bit estimate of the order $r$ of $\sigma$ is computed as 
+follows. Prepare two registers with initial value $\ldbrac{0}\ldbrac{0}$, the first register of 
 length $m = 2\ell + 1$ qubits and the second of length $n\lceil \log q \rceil$ qubits. Create a 
 superposition in the first register to get the state 
 \[ \ldbrac{\psi} = \frac{1}{\sqrt{N}} \sum_{j \in \Z/N\Z} \ldbrac{j}\ldbrac{0}. \]
-Applying $\sigma$ to $\ldbrac{\psi}$ and rewriting the resulting sum based on the period $r$ give
+Applying $\sigma$ to $\ldbrac{\psi}$ and rewriting the resulting sum based on the period $r$ gives
 \[ \sigma\ldbrac{\psi} = \frac{1}{\sqrt{N}} \sum_{j \in \Z/N\Z} \ldbrac{j}\ldbrac{\sigma^j(x)} = 
 \sum_{b = 0}^{r - 1}\left( \frac{1}{\sqrt{N}}\sum_{z = 0}^{m_b - 1}\ldbrac{zr + b} \right) 
 \ldbrac{\sigma^j(x)} \]
 where $m_b$ is the largest integer such that $m_b \le (N - b - 1) / r + 1$ 
-\cite{kaye2007introduction}. Descarding the second register leaves the first register in the 
-superposition
+\cite{kaye2007introduction}. Discarding the second register leaves the first register in the 
+superposition state
 \[ \frac{1}{\sqrt{m_b}} \sum_{z = 0}^{m_b - 1}\ldbrac{zr + b} \]
 where $b \in \Z/r\Z$ is selected nearly uniformly at random. Applying $F_N^{-1}$ and measuring, we 
-obtain an integer $k$ such that $k / N$ is an extimate of $j / r$ for some nearly uniformly random 
-$j \in \Z/r\Z$. More precisly, one can show that $\abs{k / N - j / r} \le \frac{1}{2N}$ for some 
+obtain an integer $k$ such that $k / N$ is an estimate of $j / r$ for some nearly uniformly random 
+$j \in \Z/r\Z$. More precisely, one can show that $\abs{k / N - j / r} \le \frac{1}{2N}$ for some 
 nearly uniformly random $j \in \Z/r\Z$. Using rational number reconstruction, we can obtain 
-integeres $j_1, r_1$ such that $j_1 / r_1 = j / r$. Repeating the process, we obtain another pair 
+integers $j_1, r_1$ such that $j_1 / r_1 = j / r$. Repeating the process, we obtain another pair 
 $j_2, r_2$. It can be shown that $r = \lcm(r_1, r_2)$ with probability $\approx 6 / \pi^2$. 
 Therefore, we only need to run the above procedure a constant number of time to obtain $r$ with 
 high probability. This is summarized in Algorithm \ref{alg:qtm-order}.
@@ -285,11 +287,11 @@ high probability. This is summarized in Algorithm \ref{alg:qtm-order}.
 		\Ensure The order $r$ of $\sigma$ or `Fail'
 		\State $m := 2\ell + 1$, $N := 2^m$
 		\State\label{step:superpos}Prepare registers $\ldbrac{0}\ldbrac{0}$ of length $m$ qubits 
-		and $n\lceil \log q \rceil$ qubits repectively.
+		and $n\lceil \log q \rceil$ qubits respectively.
 		\State\label{step:app-sig}Create a superposition in the first register and apply $\sigma$ 
 		to get
 		\[ \frac{1}{\sqrt{N}} \sum_{j \in \Z/N\Z} \ldbrac{j}\ldbrac{\sigma^j(x)} \]
-		\State\label{step:qft-inv}Discard the second register and apply $F_N^{-1}$ to the frist 
+		\State\label{step:qft-inv}Discard the second register and apply $F_N^{-1}$ to the first 
 		register to obtain an integer $k$ such that $j_1 / r_1 = k / N$ is an estimate of $j / r$ 
 		for some nearly uniformly random $j \in \Z/r\Z$
 		\State\label{step:frac-est}Compute $r_1$ using rational number reconstruction
@@ -298,7 +300,7 @@ high probability. This is summarized in Algorithm \ref{alg:qtm-order}.
 		\State\label{step:sig-test} If $\sigma^r = \text{id}$ then return $r$, else return `Fail'
 	\end{algorithmic}}
 \end{algorithm}
-
+	
 \begin{proposition}
 	Given a squarefree monic polynomial $f \in \F_q[x]$ of degree $n$, an element $\sigma \in 
 	\lrang{\pi}$ and an integer $\ell > 0$, Algorithm \ref{alg:qtm-order} computes the order of 
