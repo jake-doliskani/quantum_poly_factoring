@@ -136,7 +136,7 @@
 Factoring polynomials over finite fields has been known to be randomized polynomial time in the 
 seminal work of Berlekamp \cite{Berlekamp70}. Various improvements on polynomial factorization, 
 over many decades, have been made since Berlekamp's work. Two major steps were taken by 
-\cite{cantor1981new} and \cite{von1992computing}; In the latter, von zur Gathen and Shoup proposed 
+\cite{cantor1981new} and \cite{von1992computing}; in the latter, von zur Gathen and Shoup proposed 
 an efficient way of computing traces and powers of the Frobenius map in the polynomial ring modulo 
 the input polynomial. Their algorithm is quasi-quadratic in the degree of the polynomial to be 
 factored. Kaltofen and Shoup proposed a baby-step giant-step technique combined with an efficient 
@@ -146,12 +146,12 @@ q)$ finite field operations.
 
 The best known algorithm, as of now, is an implementation of the Kaltofen-Shoup algorithm due to 
 Kedlaya and Umans \cite{kedlaya2011fast}. They proposed a fast algorithm for modular composition 
-that when plagued into the Kaltofen-Shoup algorithm leads to an algorithm with complexity 
+that when plugged into the Kaltofen-Shoup algorithm leads to an algorithm with complexity 
 $O(n^{3/2 + o(1)}\log^{1 + o(1)}q + n^{1 + o(1)}\log^{2 + o(1)}q)$ bit operations. A recent 
 result of Doliskani \textit{et al.}\,\cite{doliskani2017drinfeld} achieves the same complexity by 
 exploiting some geometric properties of Rank 2 Drinfeld modules. Despite much effort, improving the 
-exponent $3 / 2$ has remained an open problem. Guo \textit{et al.}\,\cite{guo2016alg} propose a set 
-of algebraic problems that are equivalent to improving the exponent $3 / 2$ in polynomial 
+exponent $3 / 2$ has remained an open problem. Guo \textit{et al.}\,\cite{guo2016alg} proposed a 
+set of algebraic problems that are equivalent to improving the exponent $3 / 2$ in polynomial 
 factorization. In this paper, we propose a quantum algorithm that improves this bound. Our main 
 result is as follows:
 \begin{theorem}
@@ -182,7 +182,7 @@ The SFF stage cane be done using an algorithm of Yun \cite{yun1976square} which 
 o(1)}\log^{1 + o(1)}q + n\log^{2 + o(1)}q)$ bit operations. For the EDF stage the probabilistic 
 algorithm of von zur Gathen and Shoup \cite{von1992computing} takes an expected $O(n^{1 + 
 o(1)}\log^{2 + o(1)}q)$ bit operations. The bottleneck of polynomial factorization is the DDF 
-stage for which the best know algorithm takes $O(n^{3/2 + o(1)}\log^{1 + o(1)}q + n^{1 + o(1)} 
+stage for which the best known algorithm takes $O(n^{3/2 + o(1)}\log^{1 + o(1)}q + n^{1 + o(1)} 
 \log^{2 + o(1)}q)$ bit operations \cite{kedlaya2011fast}. Therefore, to asymptotically improve the 
 complete factorization algorithm we shall focus only on the DDF stage.
 
@@ -227,10 +227,10 @@ of $\pi$, we use a quantum period finding algorithm.
 \label{sec:ord-frob}
 
 Given a squarefree polynomial $f \in \F_q[x]$ of degree $n > 1$, let $\K = \F_q[x] / f$. The 
-$\F_q$-endomorphism $\pi: \K \rightarrow \K$ define by $x \mapsto x^q$ is called the Frobenius 
+$\F_q$-endomorphism $\pi: \K \rightarrow \K$ defined by $x \mapsto x^q$ is called the Frobenius 
 endomorphism. Since $f$ is squarefree, $\pi$ is an automorphism. The cyclic group of automorphisms 
 $\lrang{\pi}$ is finite. We give a quantum algorithm that efficiently estimates the order of any 
-automorphism $\sigma \in \lrang{\pi}$. The quantum algorithm is not new; It is a standard order 
+automorphism $\sigma \in \lrang{\pi}$. The quantum algorithm is not new; it is a standard order 
 finding algorithm adapted to our situation. 
 
 To find the order of an automorphism $\sigma$ we use the techniques in \cite{kaye2007introduction, 
@@ -272,9 +272,9 @@ where $b \in \Z/r\Z$ is selected nearly uniformly at random. Applying $F_N^{-1}$
 obtain an integer $k$ such that $k / N$ is an estimate of $j / r$ for some nearly uniformly random 
 $j \in \Z/r\Z$. More precisely, one can show that $\abs{k / N - j / r} \le \frac{1}{2N}$ for some 
 nearly uniformly random $j \in \Z/r\Z$. Using rational number reconstruction, we can obtain 
-integers $j_1, r_1$ such that $j_1 / r_1 = j / r$. Repeating the process, we obtain another pair 
+integers $j_1, r_1$ such that $j_1 / r_1 = j / r$. Repeating this process, we obtain another pair 
 $j_2, r_2$. It can be shown that $r = \lcm(r_1, r_2)$ with probability $\approx 6 / \pi^2$. 
-Therefore, we only need to run the above procedure a constant number of time to obtain $r$ with 
+Therefore, we only need to run the above procedure a constant number of times to obtain $r$ with 
 high probability. This is summarized in Algorithm \ref{alg:qtm-order}.
 
 \begin{algorithm}[t]
@@ -419,7 +419,7 @@ We need the following lemma.
 	\sqrt[3]{n} \ln n \right). \qedhere \]
 \end{proof}
 Given an $f$ for which $d \in O(\exp(c\sqrt{n \ln n}))$, we can first extract all irreducible 
-factor of $f$ of degree at most $n^{2 / 3}$. This can be done using the algorithm of \cite[\S 
+factors of $f$ of degree at most $n^{2 / 3}$. This can be done using the algorithm of \cite[\S 
 8]{kedlaya2011fast} at the cost of $O(n^{4 / 3 + o(1)}\log^{2 + o(1)}q)$ bit operations. For the 
 remaining polynomial $\tilde{f}$, the order $\tilde{d}$ of the Frobenius $\tilde{\sigma}$ of 
 $\F_q[x] / \tilde{f}$ is at most $\exp(\frac{2}{3}\sqrt[3]{n} \ln n)$ by Lemma 
@@ -624,9 +624,9 @@ order of the Frobenius of $\F_q[x] / g$ is always bounded by that of $\F_q[x] / 
 analyze the complexity of Algorithm \ref{alg:ddf}. We shall need the following two propositions.
 \begin{proposition}
 	\label{prop:frobs}
-	Given a polynomial $f \in \F_q[x]$ of degree $n$, a power $\tilde{\sigma}(x) = x^{q^t}$ of 
-	the Frobenius of $\F_q[x] / f$, and an integer $d = p_1^{e_1} p_2^{e_2} \cdots p_\ell^{e_\ell}$ 
-	in the factored form, the sequence
+	Given a polynomial $f \in \F_q[x]$ of degree $n$, a power $\tilde{\sigma}(x) = x^{q^t}$ of the 
+	Frobenius of $\F_q[x] / f$, and an integer $d = p_1^{e_1} p_2^{e_2} \cdots p_\ell^{e_\ell}$ in 
+	the factored form, the sequence
 	\begin{equation}
 	\label{equ:frobs}
 		\tilde{\sigma}^{d / p_1}(x) \bmod f, \dots, \tilde{\sigma}^{d / p_\ell}(x) \bmod f
@@ -662,13 +662,13 @@ analyze the complexity of Algorithm \ref{alg:ddf}. We shall need the following t
 	Let $P = \{ q_1, q_2, \dots, q_s \}$ be the set of all primes $\le n$. The subproduct tree for 
 	the set $P$ is a binary tree described as follows. The root of the tree is the product $q_1 q_2 
 	\dots q_s$. Now divide the set $P$ into two halves for the left and right subtrees with roots 
-	the products $q_1 q_2 \dots q_{\lceil s / 2 \rceil}$ and $q_{\lceil s / 2 \rceil + 1} \dots q_s$ 
-	respectively. Repeating this this process results in a tree with leaves the primes in $P$. The 
-	tree can be built recursively: starting from the leaves, the value of a parent node is the 
-	product of the roots of the left and right subtrees. Since two $m$-bit integers are multiplied 
-	in $O(m^{1 + o(1)})$ bit operation, it easily seen that each level of the tree is built at the 
-	cost of $O(n^{1 + o(1)})$ bit operations. Since the height of the tree is $O(\log n)$, the 
-	total cost of building the tree is $O(n^{1 + o(1)})$ bit operations.
+	the products $q_1 q_2 \dots q_{\lceil s / 2 \rceil}$ and $q_{\lceil s / 2 \rceil + 1} \dots 
+	q_s$, respectively. Repeating this this process results in a tree with leaves the primes in 
+	$P$. The tree can be built recursively: starting from the leaves, the value of a parent node 
+	is the product of the roots of the left and right subtrees. Since two $m$-bit integers are 
+	multiplied in $O(m^{1 + o(1)})$ bit operation, it is easily seen that each level of the tree is 
+	built at the cost of $O(n^{1 + o(1)})$ bit operations. Since the height of the tree is 
+	$O(\log n)$, the total cost of building the tree is $O(n^{1 + o(1)})$ bit operations.
 	
 	Now, given a subproduct tree $T$ for $P$, we can compute $D = \{ d \bmod p : p \in P \}$ as 
 	follows. We reduce $d$ modulo the root of $T$, and then reduce the resulting value modulo the 
@@ -726,7 +726,7 @@ analyze the complexity of Algorithm \ref{alg:ddf}. We shall need the following t
 	Lemma \ref{lem:depth}, the depth of the recursion is $O(\log n)$, we have
 	\[ T(n) \in O(n^{1 + o(1)} \log^{2 + o(1)}q). \]
 	If $d \notin O(2^{\log^cn})$ then for an input polynomial of degree $m$ it is always guaranteed 
-	that $\log d \in O(m^{1 / 3 + o(1)})$. In this case, the algorithm rakes $U(m) = O(m^{4 / 3 + 
+	that $\log d \in O(m^{1 / 3 + o(1)})$. In this case, the algorithm takes $U(m) = O(m^{4 / 3 + 
 	o(1)} \log^{2 + o(1)}q  + n^{1 + o(1)})$ bit operations before the recursive calls. Again since 
 	$U$ is a super-additive function and \eqref{equ:cost-ineq} holds, for an input polynomial of 
 	degree $n$, the total cost of the algorithm is
