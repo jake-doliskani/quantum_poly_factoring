@@ -17,9 +17,10 @@
 \usepackage{booktabs}
 \usepackage{authblk}
 \usepackage{tcolorbox}
-\usepackage[T1]{fontenc}
-\usepackage{libertine}
-\usepackage[libertine]{newtxmath}
+\usepackage[title]{appendix}
+%\usepackage[T1]{fontenc}
+%\usepackage{libertine}
+%\usepackage[libertine]{newtxmath}
 
 
 \hypersetup{
@@ -52,7 +53,7 @@
 \algrenewcommand{\Require}{\item[\textbf{Input:}]}
 \algrenewcommand{\Ensure}{\item[\textbf{Output:}]}
 \newcommand{\algbox}[1]{
-	\begin{tcolorbox}[width = 0.8\textwidth, colback = white, arc = 2pt, boxrule = 0.5pt] 
+	\begin{tcolorbox}[width = \textwidth, colback = white, arc = 2pt, boxrule = 0.5pt] 
 		#1 
 	\end{tcolorbox}
 }
@@ -87,18 +88,29 @@
 \DeclareMathOperator{\rev}{rev}
 \DeclareMathOperator{\Hom}{Hom}
 
-\def\Q{\ensuremath{\varmathbb{Q}}}
-\def\C{\ensuremath{\varmathbb{C}}}
-\def\K{\ensuremath{\varmathbb{K}}}
-\def\N{\ensuremath{\varmathbb{N}}}
-\def\R{\ensuremath{\varmathbb{R}}}
-\def\Z{\ensuremath{\varmathbb{Z}}}
-\def\F{\ensuremath{\varmathbb{F}}}
-\def\P{\ensuremath{\varmathbb{P}}}
+%\def\Q{\ensuremath{\varmathbb{Q}}}
+%\def\C{\ensuremath{\varmathbb{C}}}
+%\def\K{\ensuremath{\varmathbb{K}}}
+%\def\N{\ensuremath{\varmathbb{N}}}
+%\def\R{\ensuremath{\varmathbb{R}}}
+%\def\Z{\ensuremath{\varmathbb{Z}}}
+%\def\F{\ensuremath{\varmathbb{F}}}
+%\def\P{\ensuremath{\varmathbb{P}}}
+%\def\MM{\ensuremath{\mathsf{M}}}
+%\def\CC{\ensuremath{\mathsf{C}}}
+%\def\euler{\ensuremath{\varphi}}
+
+\def\Q{\ensuremath{\mathbb{Q}}}
+\def\C{\ensuremath{\mathbb{C}}}
+\def\K{\ensuremath{\mathbb{K}}}
+\def\N{\ensuremath{\mathbb{N}}}
+\def\R{\ensuremath{\mathbb{R}}}
+\def\Z{\ensuremath{\mathbb{Z}}}
+\def\F{\ensuremath{\mathbb{F}}}
+\def\P{\ensuremath{\mathbb{P}}}
 \def\MM{\ensuremath{\mathsf{M}}}
 \def\CC{\ensuremath{\mathsf{C}}}
 \def\euler{\ensuremath{\varphi}}
-
 
 
 
@@ -166,20 +178,22 @@ result is as follows:
 \end{theorem}
 It follows from Theorem \ref{thm:main} that the average-case runtime of the proposed algorithm for 
 polynomials of degree $n$ is $O(n^{1 + o(1)} \log^{2 + o(1)}q)$ bit operations. This is essentially 
-optimal with respect to the degree of the input. For a complete polynomial factorization algorithm 
-we follow the Cantor-Zassenhaus scheme which consists of three stages:
+optimal with respect to the degree of the input. Since we can always divide a nonzero polynomial by 
+its leading coefficient, we assume that the input polynomials are always monic, i.e., their leading 
+coefficient is equal to 1. For a complete polynomial factorization algorithm we follow the 
+Cantor-Zassenhaus scheme which consists of three stages:
 \begin{description}
-	\item[SFF] Squarefree factorization: Given a polynomial $f \in \F_q[x]$, outputs a set of 
-	squarefree polynomials $f_1, \dots, f_r$ such that $f = f_1 f_2^2 \cdots f_r^r$.
-	\item[DDF] Distinct-degree factorization: Given a squarefree polynomial $f \in \F_q[x]$, 
+	\item[SFF] Squarefree factorization: Given a monic polynomial $f \in \F_q[x]$, outputs a set of 
+	monic squarefree polynomials $f_1, \dots, f_r$ such that $f = f_1 f_2^2 \cdots f_r^r$.
+	\item[DDF] Distinct-degree factorization: Given a monic squarefree polynomial $f \in \F_q[x]$, 
 	outputs $f^{[1]}, \dots, f^{[n]}$ such that $f^{[i]}$ is the product of all monic irreducible	
 	factors of $f$ of degree $i$ for all $i = 1, \dots, n$. The inputs of this stage are the 
 	outputs of the SFF stage.
-	\item[EDF] Equal-degree factorization: Given a squarefree polynomial $f \in \F_q[x]$ such that
-	all irreducible factors of $f$ have the same degree, outputs the irreducible factors of $f$. 
-	The inputs of this stage are the outputs of the DDF stage.
+	\item[EDF] Equal-degree factorization: Given a monic squarefree polynomial $f \in \F_q[x]$ such 
+	that all irreducible factors of $f$ have the same degree, outputs the irreducible factors of 
+	$f$. The inputs of this stage are the outputs of the DDF stage.
 \end{description}
-The SFF stage cane be done using an algorithm of Yun \cite{yun1976square} which takes $O(n^{1 + 
+The SFF stage can be done using an algorithm of Yun \cite{yun1976square} which takes $O(n^{1 + 
 o(1)}\log^{1 + o(1)}q + n\log^{2 + o(1)}q)$ bit operations. For the EDF stage the probabilistic 
 algorithm of von zur Gathen and Shoup \cite{von1992computing} takes an expected $O(n^{1 + 
 o(1)}\log^{2 + o(1)}q)$ bit operations. The bottleneck of polynomial factorization is the DDF 
@@ -202,22 +216,26 @@ reduction of polynomials of degree $n$ over $\F_q$ can be done in $O(n^{1 + o(1)
 o(1)}q)$ bit operations \cite{vzGG}. 
 
 Given a polynomial $f \in \F_q[x]$ of degree $n$, define $\K = \F_q[x] / f$. The Frobenius 
-endomorphism $\pi: \K \rightarrow \K$ is an $\F_q$-homomorphism defined by $x \mapsto x^q$. Given 
-$\pi(x)$ and any integer $j > 0$, the power $\pi^{j}(x)$, which is $j$ successive compositions, can 
-be computed using a simple binary-powering algorithm at the cost of $O(\CC(n) \log j) = O(n^{1 + 
-o(1)} (\log j) \log^{1 + o(1)}q)$ bit operations. The polynomial $\pi(x) = x^q \bmod f$ can itself 
-be computed in $O(n^{1 + o(1)} \log^{2 + o(1)}q)$ bit operations.
+endomorphism $\pi: \K \rightarrow \K$ is an $\F_q$-homomorphism defined by $g \mapsto g^q$ for any 
+polynomial $g \in \K$. Since the elements of $\F_q$ are fixed by $\pi$, we have $\pi(g(x)) = g(x)^q 
+= g(x^q) = g(\pi(x))$, so $\pi$ is determined by the mapping $x \mapsto x^q$ on $\K$. Given $\pi(x)$ 
+and any integer $j > 0$, the power $\pi^{j}(x)$, which is $j$ successive compositions, can be 
+computed using a simple binary-powering algorithm at the cost of $O(\CC(n) \log j) = O(n^{1 + o(1)} 
+(\log j) \log^{1 + o(1)}q)$ bit operations. The polynomial $\pi(x) = x^q \bmod f$ can itself be 
+computed in $O(n^{1 + o(1)} \log^{2 + o(1)}q)$ bit operations.
 
 \paragraph{Our technique.}
 The exponent $3/2$, achieved by the best previous algorithms for polynomial factorization, seems to 
 be a natural outcome of the so called baby-step giant-step methodology. We take a completely 
-different approach here. Let $f \in \F_q[x]$ be a squarefree monic polynomial of degree $n$, and let 
-$d$ be the degree of the splitting of $f$ over $\F_q$. Then the degrees of the irreducible factors 
-of $f$ divide $d$. We show that given $d$, one can efficiently compute a distinct-degree 
-factorization of $f$. This reduces polynomial factorization to computation of splitting degrees. 
-Computing the splitting degree of $f$ is equivalent to computing the order of the Frobenius 
-automorphism $\pi$, defined above, in the automorphism group $\Aut(\K / \F_q)$. To compute the order 
-of $\pi$, we use a quantum period finding algorithm. 
+different approach here. Let $f \in \F_q[x]$ be a monic squarefree polynomial of degree $n$, and let 
+$d$ be the splitting degree of $f$ over $\F_q$. The splitting field of $f$ is the smallest extension 
+$\F_q \subseteq F$ over which $f$ factors into linear polynomials, and the splitting degree of $f$ 
+is the extension degree $[F : \F_q]$. Then the degrees of the irreducible factors of $f$ divide $d$. 
+We show that given $d$, one can efficiently compute a distinct-degree factorization of $f$. This 
+reduces polynomial factorization to computation of splitting degrees. Since $f$ is squarefree, the 
+Frobenius endomorphism $\pi$, defined above, is an automorphism, and computing the splitting degree 
+of $f$ is equivalent to computing the order of $\pi$ in the automorphism group $\Aut(\K / \F_q)$. To 
+compute the order of $\pi$, we use a quantum period finding algorithm. 
 
 
 
@@ -227,12 +245,11 @@ of $\pi$, we use a quantum period finding algorithm.
 \section{Estimating the order of an automorphism}
 \label{sec:ord-frob}
 
-Given a squarefree polynomial $f \in \F_q[x]$ of degree $n > 1$, let $\K = \F_q[x] / f$. The 
-$\F_q$-endomorphism $\pi: \K \rightarrow \K$ defined by $x \mapsto x^q$ is called the Frobenius 
-endomorphism. Since $f$ is squarefree, $\pi$ is an automorphism. The cyclic group of automorphisms 
-$\lrang{\pi}$ is finite. We give a quantum algorithm that efficiently estimates the order of any 
-automorphism $\sigma \in \lrang{\pi}$. The quantum algorithm is not new; it is a standard order 
-finding algorithm adapted to our situation. 
+Given a monic squarefree polynomial $f \in \F_q[x]$ of degree $n > 1$, let $\K = \F_q[x] / f$. The 
+$\F_q$-automorphism $\pi: \K \rightarrow \K$ defined by $x \mapsto x^q$ is called the Frobenius 
+automorphism. The cyclic group of automorphisms $\lrang{\pi}$ is finite. We give a quantum algorithm 
+that efficiently estimates the order of any automorphism $\sigma \in \lrang{\pi}$. The quantum 
+algorithm is not new; it is a standard order finding algorithm adapted to our situation. 
 
 To find the order of an automorphism $\sigma$ we use the techniques in \cite{kaye2007introduction, 
 nielsen2010quantum}. The group $\lrang{\sigma}$ is isomorphic to the additive group $\Z/r\Z$ for 
@@ -264,19 +281,22 @@ superposition in the first register to get the state
 Applying $\sigma$ to $\ldbrac{\psi}$ and rewriting the resulting sum based on the period $r$ gives
 \[ \sigma\ldbrac{\psi} = \frac{1}{\sqrt{N}} \sum_{j \in \Z/N\Z} \ldbrac{j}\ldbrac{\sigma^j(x)} = 
 \sum_{b = 0}^{r - 1}\left( \frac{1}{\sqrt{N}}\sum_{z = 0}^{m_b - 1}\ldbrac{zr + b} \right) 
-\ldbrac{\sigma^j(x)} \]
+\ldbrac{\sigma^b(x)} \]
 where $m_b$ is the largest integer such that $m_b \le (N - b - 1) / r + 1$ 
 \cite{kaye2007introduction}. Discarding the second register leaves the first register in the 
 superposition state
 \[ \frac{1}{\sqrt{m_b}} \sum_{z = 0}^{m_b - 1}\ldbrac{zr + b} \]
-where $b \in \Z/r\Z$ is selected nearly uniformly at random. Applying $F_N^{-1}$ and measuring, we 
+where $b \in \Z/r\Z$ is some nearly uniformly random element. Applying $F_N^{-1}$ and measuring, we 
 obtain an integer $k$ such that $k / N$ is an estimate of $j / r$ for some nearly uniformly random 
 $j \in \Z/r\Z$. More precisely, one can show that $\abs{k / N - j / r} \le \frac{1}{2N}$ for some 
-nearly uniformly random $j \in \Z/r\Z$. Using rational number reconstruction, we can obtain 
-integers $j_1, r_1$ such that $j_1 / r_1 = j / r$. Repeating this process, we obtain another pair 
-$j_2, r_2$. It can be shown that $r = \lcm(r_1, r_2)$ with probability $\approx 6 / \pi^2$. 
-Therefore, we only need to run the above procedure a constant number of times to obtain $r$ with 
-high probability. This is summarized in Algorithm \ref{alg:qtm-order}.
+nearly uniformly random $j \in \Z/r\Z$. Using the rational number reconstruction 
+\cite{pan2002acceleration} or the continued fractions algorithm \cite[\S 5.3]{nielsen2010quantum}, 
+we can obtain integers $j_1, r_1$ such that $j_1 / r_1 = j / r$. Repeating this process, we obtain 
+another pair $j_2, r_2$. It can be shown that $r = \lcm(r_1, r_2)$ with probability $\approx 6 / 
+\pi^2$. Therefore, we only need to run the above procedure a constant number of times to obtain $r$ 
+with high probability. For a complete version of the above analysis, including proofs of the above 
+facts, we refer the reader to \cite[\S 5.3]{nielsen2010quantum} and \cite[\S 
+7.3]{kaye2007introduction}. The above is summarized in Algorithm \ref{alg:qtm-order}.
 
 \begin{algorithm}[t]
 	\caption{Estimate the order of an automorphism}
@@ -285,20 +305,20 @@ high probability. This is summarized in Algorithm \ref{alg:qtm-order}.
 	\algbox{
 	\begin{algorithmic}[1]
 		\Require 
-		\item[-] A squarefree monic polynomial $f \in \F_q[x]$ of degree $n$
+		\item[-] A monic squarefree polynomial $f \in \F_q[x]$ of degree $n$
 		\item[-] An automorphism $\sigma \in \lrang{\pi}$ of the $\F_q$-algebra $\K = \F_q[x] / f$
 		\item[-] An integer $\ell < n$ as a bound for the number of bits by which the order of the 
 		automorphism $\sigma$ is estimated
 		\Ensure The order $r$ of $\sigma$ or `Fail'
 		\State $m := 2\ell + 1$, $N := 2^m$
 		\State\label{step:superpos}Prepare registers $\ldbrac{0}\ldbrac{0}$ of length $m$ qubits 
-		and $n\lceil \log q \rceil$ qubits respectively.
+		and $n\lceil \log q \rceil$ qubits respectively
 		\State\label{step:app-sig}Create a superposition in the first register and apply $\sigma$ 
 		to get
 		\[ \frac{1}{\sqrt{N}} \sum_{j \in \Z/N\Z} \ldbrac{j}\ldbrac{\sigma^j(x)} \]
-		\State\label{step:qft-inv}Discard the second register and apply $F_N^{-1}$ to the first 
-		register to obtain an integer $k$ such that $j_1 / r_1 = k / N$ is an estimate of $j / r$ 
-		for some nearly uniformly random $j \in \Z/r\Z$
+		\State\label{step:qft-inv}Discard the second register, apply $F_N^{-1}$ to the first 
+		register and then measure to obtain an integer $k$ such that $j_1 / r_1 = k / N$ is an 
+		estimate of $j / r$ for some nearly uniformly random $j \in \Z/r\Z$
 		\State\label{step:frac-est}Compute $r_1$ using rational number reconstruction
 		\State Repeat Steps \ref{step:superpos}-\ref{step:frac-est} to obtain another $r_2$, 
 		and compute $r := \lcm(r_1, r_2)$
@@ -329,7 +349,7 @@ high probability. This is summarized in Algorithm \ref{alg:qtm-order}.
 
 %/////////////////////////////////////////////////////
 
-\section{Computing the order of the Frobenius}
+\section{Computing the order of the Frobenius automorphism}
 
 Let $f \in \F_q[x]$ be a squarefree polynomial of degree $n$ and let $\K = \F_q[x] / f$. Let $f = 
 f_1f_2 \cdots f_k$ be the factorization of $f$ into distinct irreducible factors. By the Chinese 
@@ -340,19 +360,20 @@ Remainder Theorem, there is an isomorphism of rings
 \end{equation}
 Let $d_i = \deg(f_i)$ for $i = 1, \dots, k$. Then the splitting field of $f$ has degree $d = 
 \lcm(d_1, \dots, d_k)$ over $\F_q$. Also note that the Frobenius automorphism $\pi: x \mapsto x^q$ 
-of $\K$ is the coproduct of the Frobenius automorphisms $\pi_i: x \mapsto x^q$ of the fields 
-$\F_q[x] / f_i$. It follows that the order of the group $\lrang{\pi}$ is $d$ as well.
+of $\K$ is the product of the Frobenius automorphisms $\pi_i: x \mapsto x^q$ of the fields $\F_q[x] 
+/ f_i$, i.e., $\pi = \oplus_{i = 1}^k \pi_i$. It follows that the order of the group $\lrang{\pi}$ 
+is $d$ as well.
 
 Given $\sigma \in \lrang{\pi}$ of order $d'$, one could compute the exact value of $d'$ using 
 Algorithm \ref{alg:qtm-order} as follows. Start with a small estimation bound $\ell$ and call the 
 algorithm with input $(f, \sigma, \ell)$. If the algorithm does not output `Fail' then stop, 
 otherwise set $\ell := \ell + 1$ and repeat. This results in too many calls to Algorithm 
 \ref{alg:qtm-order} if $d'$ is too large. It is therefore crucial to know a reasonable bound on the 
-size $d$ of the group $\lrang{\pi}$. To obtain such a bound, one naturally looks at the distinct 
-values of the $d_i$'s above. It turns out that for almost all polynomials $f \in \F_q[x]$ of degree 
-$n$ the degree of the splitting field of $f$ over $\F_q$ is $O(2^{\polylog(n)})$, that is $\log d 
-\in O(\polylog(n))$. In fact, Knopfmacher proves the following rather precise estimate for the 
-number of distinct values of the $d_i$'s.
+size $d$ of the group $\lrang{\pi}$, since $d' \le d$. To obtain such a bound, one naturally looks 
+at the distinct values of the $d_i$'s above. It turns out that for almost all polynomials $f \in 
+\F_q[x]$ of degree $n$ the degree of the splitting field of $f$ over $\F_q$ is $O(2^{\polylog(n)})$, 
+that is $\log d \in O(\polylog(n))$. In fact, Knopfmacher proves the following rather precise 
+estimate for the number of distinct values of the $d_i$'s.
 \begin{theorem}[\cite{knopfmacher1999degrees}]
 	\label{thm:d-mean}
 	The number of irreducible factors of a polynomial $f \in \F_q[x]$ of degree $n$ has mean value 
@@ -363,40 +384,22 @@ From Theorem \ref{thm:d-mean} we see that for almost all polynomials $f$ of degr
 \dots, d_k$ are the irreducible degrees of $f$ then 
 \begin{equation}
 	\label{equ:ag-mean}
-	d = \lcm(d_1, \dots, d_k) \le \left( \frac{1}{k} \sum_{i = 1}^rd_i \right)^k \le \left( 
-	\frac{n}{k} \right)^k \approx \left( \frac{n}{\log n} \right)^{\log n} = O(2^{\log^2n})
+	d = \lcm(d_1, \dots, d_k) \le \left( \frac{1}{k} \sum_{i = 1}^kd_i \right)^k \le \left( 
+	\frac{n}{k} \right)^k \approx \left( \frac{n}{\log n} \right)^{O(\log n)} = 2^{O(\log^2n)}
 \end{equation}
-where the first inequality is the arithmetic-geometric mean. Dixon and Panario 
-\cite{dixon2004degree} give a stronger statement for bounds on $d$ based on the analogy between 
-degrees of splitting fields of polynomials of degree $n$ and orders of elements in the 
-\textit{symmetric group} $S_n$ \cite{erdos1965some, erdos1967some}. We state their result here 
-for completeness. Following the notation of \cite{dixon2004degree}, let $\lambda$ be a partition of 
-$n$ of shape $[1^{k_1} 2^{k_2} \dots n^{k_n}]$, i.e., there are $k_i$ parts of size $i$. Define 
-$m(\lambda)$ to be the $\lcm$ of the $i$'s where $k_i \ne 0$. For any $t > 0$ define 
-\[ \Phi_n(t) = \{ \lambda \vdash n : \abs{\log m(\lambda) - \log^2n / 2} > t\log^{3/2}n / \sqrt{3} 
-\} \]
-where $\lambda \vdash n$ denotes a partition $\lambda$ of $n$. A monic polynomial $f \in \F_q[X]$ 
-of degree $n$ is said to be of shape $\lambda$ if the degrees of the irreducible factors of $f$ are 
-the parts of $\lambda$. We have
-\begin{theorem}[{\cite[Theorem 1]{dixon2004degree}}]
-\label{thm:split-order}
-	For each $\lambda \vdash n$, let $w(\lambda, q)$ denote the portion of monic polynomials of 
-	degree $n$ over $\F_q$ that are of shape $\lambda$. Then there exists a constant $c > 0$ 
-	such that for each $t \ge 1$ there exists an integer $n_0(t)$ such that 
-	\[ \sum_{\lambda \in \Phi_n(t)} w(\lambda, q) \le ce^{-t / 4} \text{ for all } q \text{ and all 
-	} n \ge n_0(t). \]
-	In particular, almost all monic polynomials of degree $n$ have splitting fields of degree at 
-	most $\exp((\frac{1}{2} + o(1))\log^2n)$ over $\F_q$ as $n \to \infty$.
-\end{theorem}
+where the first inequality is the arithmetic-geometric mean. In fact, it can be proved that $d \le 
+\exp((\frac{1}{2} + o(1))\log^2n)$ for almost all polynomials of degree $n$; see Appendix 
+\ref{sec:bound-splt}.
+
 It follows from the above that for almost all squarefree $f$, the order $d$ of the Frobenius 
-$\sigma$ of $\K$ can be computed in $O(n^{1 + o(1)}\log^{1 + o(1)}q)$ bit operations: we simply 
-call Algorithm \ref{alg:qtm-order} with the bound $\ell = \log^2n$. There are, however, some $f$ 
-for which $d$ can be as large as $\exp(c\sqrt{n \ln n})$ for some constant $c > 0$  
-\cite{erdos1965some}. In this case, the input bound has to be $\ell = c\sqrt{n \ln n}$, so 
-Algorithm \ref{alg:qtm-order} computes $d$ in $O(n^{3/2 + o(1)}\log^{1 + o(1)}q)$ bit operations. 
-This already dashes the hopes of improving upon the classical bound if we ever wanted to use 
-Algorithm \ref{alg:qtm-order} as a subroutine in a polynomial factorization algorithm! Fortunately, 
-this problem can be circumvented by preprocessing $f$ before calling Algorithm \ref{alg:qtm-order}. 
+automorphism $\pi$ of $\K$ can be computed in $O(n^{1 + o(1)}\log^{1 + o(1)}q)$ bit operations: we 
+simply call Algorithm \ref{alg:qtm-order} with the bound $\ell = \log^2n$. There are, however, some 
+$f$ for which $d$ can be as large as $\exp(c\sqrt{n \ln n})$ for some constant $c > 0$ 
+\cite{erdos1965some}. In this case, the input bound has to be $\ell = c\sqrt{n \ln n}$, so Algorithm 
+\ref{alg:qtm-order} computes $d$ in $O(n^{3/2 + o(1)}\log^{1 + o(1)}q)$ bit operations. This already 
+dashes the hopes of improving upon the classical bound if we ever wanted to use Algorithm 
+\ref{alg:qtm-order} as a subroutine in a polynomial factorization algorithm! Fortunately, this 
+problem can be circumvented by preprocessing $f$ before calling Algorithm \ref{alg:qtm-order}. 
 We need the following lemma.
 \begin{lemma}
 \label{lem:frob-sub-ord}
@@ -422,8 +425,8 @@ We need the following lemma.
 Given an $f$ for which $d \in O(\exp(c\sqrt{n \ln n}))$, we can first extract all irreducible 
 factors of $f$ of degree at most $n^{2 / 3}$. This can be done using the algorithm of \cite[\S 
 8]{kedlaya2011fast} at the cost of $O(n^{4 / 3 + o(1)}\log^{2 + o(1)}q)$ bit operations. For the 
-remaining polynomial $\tilde{f}$, the order $\tilde{d}$ of the Frobenius $\tilde{\sigma}$ of 
-$\F_q[x] / \tilde{f}$ is at most $\exp(\frac{2}{3}\sqrt[3]{n} \ln n)$ by Lemma 
+remaining polynomial $\tilde{f}$, the order $\tilde{d}$ of the Frobenius automorphism 
+$\tilde{\sigma}$ of $\F_q[x] / \tilde{f}$ is at most $\exp(\frac{2}{3}\sqrt[3]{n} \ln n)$ by Lemma 
 \ref{lem:frob-sub-ord}. Now, if we call Algorithm \ref{alg:qtm-order} with input $(\tilde{f}, 
 \tilde{\sigma}, \sqrt[3]{n} \ln n)$, we obtain $\tilde{d}$ at the cost of $O(n^{4 / 3 + o(1)}\log^{1 
 + o(1)}q)$ bit operations.
@@ -441,28 +444,33 @@ of the algorithm that proves useful in later stages of our factorization algorit
 \ref{alg:ddf}.
 
 \begin{algorithm}[t]
-	\caption{Compute the order of a power of the Frobenius}
+	\caption{Compute the order of a power of the Frobenius automorphism}
 	\label{alg:order}
 	\centering
 	\algbox{
 	\begin{algorithmic}[1]
 		\Require 
 		\item[-] A monic squarefree polynomial $f \in \F_q[x]$ of degree $n$
-		\item[-] An element $\sigma \in \lrang{\pi}$ of the Frobenius group of $\F_q[x] / f$
+		\item[-] An element $\sigma \in \lrang{\pi}$ where $\pi$ is the Frobenius automorphism of 
+		$\F_q[x] / f$
 		\item[-] A bound $\ell$
-		\Ensure A monic polynomial $g \mid f$ and the order of the Frobenius of $\F_q[x] / g$
-		\State Compute an estimate $d$ of $\sigma$ using Algorithm \ref{alg:qtm-order} with input 
-		$(f, \sigma, \ell)$
+		\Ensure 
+		\item[-] A monic polynomial $g \mid f$ and the order of the Frobenius automorphism of 
+		$\F_q[x] / g$
+		\item[-] The set $T$ of irreducible factors of $f / g$
+		\State $T := \{\}$
+		\State Compute an estimate $d$ of the order of $\sigma$ using Algorithm \ref{alg:qtm-order} 
+		with input $(f, \sigma, \ell)$
 		\If {the output is not `Fail'}
-			\State \Return $f, d$
+			\State \Return $f, d, T$
 		\EndIf
-		\State Remove and output all irreducible factors of degree $\le n^{2 / 3}$ from 
-		$f$, and let $\tilde{f}$ be the resulting polynomial
+		\State Remove all irreducible factors of degree $\le n^{2 / 3}$ from $f$ and add them to 
+		$T$, and let $\tilde{f}$ be the resulting polynomial
 		\State Set $\tilde{\ell} := \lceil c_1\sqrt[3]{n} \log n \rceil$ for a suitable constant 
 		$c_1$
-		\State Compute an estimate $\tilde{d}$ of the Frobenius $\tilde{\sigma}$ of $\F_q[x] / 
-		\tilde{f}$ using Algorithm \ref{alg:qtm-order}.
-		\State \Return $\tilde{f}, \tilde{d}$
+		\State Compute an estimate $\tilde{d}$ of the order of the Frobenius automorphism 
+		$\tilde{\sigma}$ of $\F_q[x] / \tilde{f}$ using Algorithm \ref{alg:qtm-order}.
+		\State \Return $\tilde{f}, \tilde{d}, T$
 	\end{algorithmic}}
 \end{algorithm}
 
@@ -486,8 +494,8 @@ of the algorithm that proves useful in later stages of our factorization algorit
 
 In this section, we give a dynamic programing algorithm for the distinct-degree factorization of a 
 squarefree polynomial $f(x)$ of degree $n$ over $\F_q$. Our algorithm invokes the quantum algorithm 
-of the previous section in order to determine the order of a power of the Frobenius modulo $f$. We 
-aim to solve the following subproblem.
+of the previous section in order to determine the order of a power of the Frobenius automorphism 
+modulo $f$. We aim to solve the following subproblem.
 \begin{problem}
 	Given a tuple $(f(x), s)$ where $f(x)$ is a squarefree polynomial and $s > 0$ is an integer 
 	that divides the degrees of all irreducible factors of $f$, produce a set $T = \{ (f_1, s_1), 
@@ -502,16 +510,16 @@ aim to solve the following subproblem.
 To obtain a DDF of $f$, we start with the tuple $(f, 1)$ and recursively solve the above problem 
 for every output tuple until each tuple is a distinct-degree part of $f$. Before discussing the 
 solution to the above problem, we recall the following key fact.
-\begin{fact}
+\begin{fact}[{\cite[Theorem 3.5]{lidl1997finite}}]
 	For any integer $d > 0$, the polynomial $x^{q^d} - x \in \F_q[x]$ is the product of all monic 
-	irreducible polynomials whose degree divide $d$. 
+	irreducible polynomials over $\F_q$ whose degrees divide $d$. 
 \end{fact}
 This means that $\gcd(x^{q^d} - x, f)$ is the product of the distinct-degree parts of $f$ whose 
 degree divide $d$.
 
 Now, let $(f(x), s)$ be given as above and let $d_1, \dots, d_k$ be the degrees of irreducible 
-factors of $f$. Let $\sigma$ be the Frobenius of $\F_q[x] / f$, and set $T = \{\}$. Compute the 
-Frobenius power $\tilde{\sigma} = \sigma^s$. If $\tilde{\sigma} = \text{id}$ then $d_i \mid s$ for 
+factors of $f$. Let $\sigma$ be the Frobenius automorphism of $\F_q[x] / f$, and set $T = \{\}$. 
+Compute the power $\tilde{\sigma} = \sigma^s$. If $\tilde{\sigma} = \text{id}$ then $d_i \mid s$ for 
 all $1 \le i \le k$. But since $s \mid d_i$ for all $1 \le i \le k$ by assumption, we have $d_1 = 
 \cdots = d_k = s$ so $f$ is a distinct-degree part and we are done. So assume $\tilde{\sigma} \ne 
 \text{id}$. Compute the order $d$ of $\tilde{\sigma}$ using Algorithm \ref{alg:order}. Note that 
@@ -519,9 +527,11 @@ the output of Algorithm \ref{alg:order} might be some distinct-degree parts of $
 $\tilde{f} \mid f$ such that $d$ is the order of $\tilde{\sigma}$ as an automorphism of $\F_q[x] / 
 \tilde{f}$. We assume, without loss of generality, that the distinct-degree outputs are appended to 
 $T$, $f := \tilde{f}$ and $d_1, \dots, d_k$ are again the degrees of irreducible factors of $f$.
-Write $d = p_1^{e_1} p_2^{e_2} \cdots p_\ell^{e_\ell}$, where $p_i$'s are pairwise 
-distinct primes and $e_i$'s are positive integers. Since $sd = \lcm(d_1, \dots, d_k)$, each prime 
-power $p_i^{e_i}$ must divide at least one of the $d_j$'s. Let 
+Write $d = p_1^{e_1} p_2^{e_2} \cdots p_\ell^{e_\ell}$, where $p_i$'s are pairwise distinct primes 
+and $e_i$'s are positive integers. Note that since $d$ is a smooth number, i.e., we have $p_i \le n$ 
+for all $i$, this factorization can be obtained efficiently, see Proposition \ref{prop:factor-d}. 
+Since $sd = \lcm(d_1, \dots, d_k)$, each prime power $p_i^{e_i}$ must divide at least one of the 
+$d_j$'s. Let 
 \[ g(x) := \gcd(\tilde{\sigma}^{d / \prod_{i = 1}^\ell p_i}(x) - x, f). \]
 Then $g(x)$ is the product of all factors of $f$ with degrees dividing $s \prod_{i = 1}^\ell 
 p_i^{e_i - 1}$, and $g_0(x) := f / g$ is the product of factors with degrees a multiple of at least 
@@ -569,18 +579,17 @@ Lemma \ref{lem:depth}.
 		\State\label{step:gcd-first}Compute $g(x) := \gcd(\tilde{\sigma}^{d / \prod_{i = 1}^\ell 
 		p_i}(x) - x, f)$ and $g_0(x) := f / g$
 		\State $T := \{\}$
-		\State\label{step:proper}If $g \ne 1$ then add $(g, s, n)$ to $T$
+		\State\label{step:proper}If $g \ne 1$ then add $(g, s)$ to $T$
 		\For {$i = 1$ to $\ell$ }\label{step:for-ddf}
 			\State Compute $g_i(x) := \gcd(\tilde{\sigma}^{d / p_i}(x) - x, g_{i - 1})$
 			\If {$g_i \ne 1$} 
-				\State Compute $h_i := g_{i - 1} / g_i$ and add the tuple $(h_i, sp_i^{e_i}, n)$ to 
-				$T$
+				\State Compute $h_i := g_{i - 1} / g_i$ and add the tuple $(h_i, sp_i^{e_i})$ to $T$
 			\Else
 				\State $g_i := g_{i - 1}$, $s := sp_i^{e_i}$
 			\EndIf
 		\EndFor
-		\State Add $(g_\ell, s, n)$ to $T$
-		\State Recursively process all tuples in $T$
+		\State Add $(g_\ell, s)$ to $T$
+		\State Recursively process the inputs $(h, s), n$ for all tuples $(h, s) \in T$
 	\end{algorithmic}}
 \end{algorithm}
 
@@ -592,13 +601,13 @@ Lemma \ref{lem:depth}.
 \begin{proof}
 	Let $d'$ be an irreducible degree of $f(x)$ and let $(f(x), 1) = (a_1(x), s_1), (a_2(x), s_2), 
 	\dots, (a_k(x), s_k) = (a_k(x), d')$ be the path to the degree $d'$ part of $f$ generated by 
-	Algorithm \ref{alg:ddf}. Let $d_i$ be the degree of the Frobenius $\sigma^{s_i} \bmod a_i(x)$ 
-	computed in Step \ref{step:order} for $i = 1, \dots, k$, and let $d_1 := p_1^{e_1} p_2^{e_2} 
-	\cdots p_\ell^{e_\ell}$ be the prime factorization of $d_1$ at Step \ref{step:factor-d}. Write 
-	$d' = p_1^{\alpha_1} \cdots p_\ell^{\alpha_\ell}$ where $0 \le \alpha_i \le e_i$ for all $i 
-	= 1, \dots, \ell$. Now, given $1 \le j \le k$, write $d_j = p_1^{\beta_1} \cdots 
-	p_\ell^{\beta_\ell}$. Then only two things can happen from $(a_j(x), s_j)$ to $(a_{j + 1}(x), 
-	s_{j + 1})$:
+	Algorithm \ref{alg:ddf}. Let $d_i$ be the degree of the Frobenius automorphism $\sigma^{s_i} 
+	\bmod a_i(x)$ computed in Step \ref{step:order} for $i = 1, \dots, k$, and let $d_1 := p_1^{e_1} 
+	p_2^{e_2} \cdots p_\ell^{e_\ell}$ be the prime factorization of $d_1$ at Step 
+	\ref{step:factor-d}. Write $d' = p_1^{\alpha_1} \cdots p_\ell^{\alpha_\ell}$ where $0 \le 
+	\alpha_i \le e_i$ for all $i = 1, \dots, \ell$. Now, given $1 \le j \le k$, write $d_j = 
+	p_1^{\beta_1} \cdots p_\ell^{\beta_\ell}$. Then only two things can happen from $(a_j(x), s_j)$ 
+	to $(a_{j + 1}(x), s_{j + 1})$:
 	\begin{enumerate}
 		\item\label{case:proper} $\alpha_r < \beta_r$ for all $r = 1, \dots, \ell$. In other words, 
 		non of the prime powers $p_i^{\beta_i}$ divides $d'$. This happens when $(a_{j + 1}(x), s_{j 
@@ -617,16 +626,18 @@ Lemma \ref{lem:depth}.
 Given a squarefree polynomial $f \in \F_q[x]$ of degree $n$, calling Algorithm \ref{alg:ddf} with 
 the input tuple $(f, s = 1, n)$ will produce the DDF of $f$. The auxiliary input integer $n$ is 
 never changed. It is used in Step \ref{step:order} to input the bound $\ell = \log^2n$ to Algorithm 
-\ref{alg:order}. This will simplifies the complexity analysis of the algorithm. Note that when the 
+\ref{alg:order}. This will simplify the complexity analysis of the algorithm. Note that when the 
 algorithm is called for the first time, if $d \in O(2^{\log^2n})$ then we could always assume that 
 this bound holds for the subsequent $d$'s in the the next stages of the recursion: for any input 
 polynomial $g$ of degree $m$ in an intermediate stage we have $m < n$ and $g \mid f$ so that the 
-order of the Frobenius of $\F_q[x] / g$ is always bounded by that of $\F_q[x] / f$. Let us now 
-analyze the complexity of Algorithm \ref{alg:ddf}. We shall need the following two propositions.
+order of the Frobenius automorphism of $\F_q[x] / g$ is always bounded by that of $\F_q[x] / f$. Let 
+us now analyze the complexity of Algorithm \ref{alg:ddf}. We shall need the following two 
+propositions.
 \begin{proposition}
 	\label{prop:frobs}
 	Given a polynomial $f \in \F_q[x]$ of degree $n$, a power $\tilde{\sigma}(x) = x^{q^t}$ of the 
-	Frobenius of $\F_q[x] / f$, and an integer $d = p_1^{e_1} p_2^{e_2} \cdots p_\ell^{e_\ell}$ in 
+	Frobenius automorphism of $\F_q[x] / f$, and an integer $d = p_1^{e_1} p_2^{e_2} \cdots 
+	p_\ell^{e_\ell}$ in 
 	the factored form, the sequence
 	\begin{equation}
 	\label{equ:frobs}
@@ -643,11 +654,11 @@ analyze the complexity of Algorithm \ref{alg:ddf}. We shall need the following t
 	\tilde{\sigma}^{d_2} \}$. The problem $\{ p_i^{e_i}, [i, i], \tilde{\sigma}^{d / p_i^{e_i}} \}$ 
 	is solved by simply raising $\tilde{\sigma}^{d / p_i^{e_i}}$ to the power $p_i^{e_i - 1}$.
 	
-	Computing the powers of the Frobenius is done using modular composition. At any level of the 
-	recursions, the total number of modular compositions is $O(\log d)$. Therefore, at level $j$ we 
-	spend $O(\CC(n) \log d)$ operations in $\F_q$ on modular compositions, and $O(2^j\MM(n))$ 
-	operations in $\F_q$ on $2^j$ polynomial reductions. Since the depth of the recursion is $\log 
-	\ell$, the 	claimed runtime follows.
+	Computing the powers of the Frobenius automorphism is done using modular composition. At any 
+	level of the recursions, the total number of modular compositions is $O(\log d)$. Therefore, at 
+	level $j$ we spend $O(\CC(n) \log d)$ operations in $\F_q$ on modular compositions, and 
+	$O(2^j\MM(n))$ operations in $\F_q$ on $2^j$ polynomial reductions. Since the depth of the 
+	recursion is $\log \ell$, the claimed runtime follows.
 \end{proof}
 \begin{proposition}
 	\label{prop:factor-d}
@@ -686,7 +697,7 @@ analyze the complexity of Algorithm \ref{alg:ddf}. We shall need the following t
 \end{remark}
 \begin{theorem}\label{thm:alg-ddf}
 	Let $f \in \F_q[x]$ be a square free polynomial of degree $n$ and let $d$ be the order of the 
-	Frobenius of $\F_q[x] / f$. Then the runtime of Algorithm \ref{alg:ddf} is
+	Frobenius automorphism of $\F_q[x] / f$. Then the runtime of Algorithm \ref{alg:ddf} is
 	\begin{itemize}
 		\item $O(n^{1 + o(1)} \log^{2 + o(1)}q)$ bit operations if $d \in O(2^{\log^2n})$, or
 		\item $O(n^{4 / 3 + o(1)} \log^{2 + o(1)}q)$ bit operations otherwise.
@@ -746,5 +757,37 @@ complexity. \hfil \qed
 
 \bibliographystyle{plain}
 \bibliography{references}
+
+
+\begin{appendices}
+	
+\section{Bound on the splitting degree}
+\label{sec:bound-splt}
+
+Dixon and Panario \cite{dixon2004degree} give a rather strong statement for bounds on splitting 
+degrees of polynomials over finite fields. Their result is based on the analogy between splitting 
+degrees of polynomials of degree $n$ and orders of elements in the \textit{symmetric group} $S_n$ 
+\cite{erdos1965some, erdos1967some}. We state their result here for completeness. Following the 
+notation of \cite{dixon2004degree}, let $\lambda$ be a partition of $n$ of shape $[1^{k_1} 2^{k_2} 
+\dots n^{k_n}]$, i.e., there are $k_i$ parts of size $i$. Define $m(\lambda)$ to be the $\lcm$ of 
+the $i$'s where $k_i \ne 0$. For any $t > 0$ define 
+\[ \Phi_n(t) = \{ \lambda \vdash n : \abs{\log m(\lambda) - \log^2n / 2} > t\log^{3/2}n / \sqrt{3} 
+\} \]
+where $\lambda \vdash n$ denotes a partition $\lambda$ of $n$. A monic polynomial $f \in \F_q[X]$ of 
+degree $n$ is said to be of shape $\lambda$ if the degrees of the irreducible factors of $f$ are the 
+parts of $\lambda$. We have
+\begin{theorem}[{\cite[Theorem 1]{dixon2004degree}}]
+	\label{thm:split-order}
+	For each $\lambda \vdash n$, let $w(\lambda, q)$ denote the portion of monic polynomials of 
+	degree $n$ over $\F_q$ that are of shape $\lambda$. Then there exists a constant $c > 0$ such 
+	that for each $t \ge 1$ there exists an integer $n_0(t)$ such that 
+	\[ \sum_{\lambda \in \Phi_n(t)} w(\lambda, q) \le ce^{-t / 4} \text{ for all } q \text{ and 
+	all } n \ge n_0(t). \]
+	In particular, almost all monic polynomials of degree $n$ have splitting fields of degree at 
+	most $\exp((\frac{1}{2} + o(1))\log^2n)$ over $\F_q$ as $n \to \infty$.
+\end{theorem}
+	
+
+\end{appendices}
 
 \end{document}
